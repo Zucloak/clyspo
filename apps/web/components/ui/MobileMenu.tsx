@@ -1,10 +1,8 @@
 import { Button } from "@cap/ui";
-import { User } from "next-auth";
 import Link from "next/link";
 
 interface MobileMenuProps {
   setShowMobileMenu: (showMobileMenu: boolean) => void;
-  auth: User | null;
 }
 
 interface NavLink {
@@ -58,9 +56,7 @@ const externalLinks: NavLink[] = [
 
 const MobileMenu: React.FC<MobileMenuProps> = ({
   setShowMobileMenu,
-  auth,
 }) => {
-  console.log(auth, 'auth')
   return (
     <div className="overflow-auto fixed top-0 left-0 z-40 px-4 w-full h-full bg-gray-2 block md:hidden">
       <div className="pb-12">
@@ -95,24 +91,13 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
             </div>
           </ul>
           <div className="flex flex-col gap-4 items-center">
-            {auth === null && (
-              <Button
-                variant="gray"
-                href="/login"
-                size="lg"
-                className="w-full font-medium"
-              >
-                Login
-              </Button>
-            )}
-
             <Button
               variant="primary"
-              href={auth === null ? "/download" : "/dashboard"}
+              href="/download"
               size="lg"
               className="w-full font-medium"
             >
-              {auth === null ? "Download App" : "Dashboard"}
+              Download App
             </Button>
           </div>
         </nav>

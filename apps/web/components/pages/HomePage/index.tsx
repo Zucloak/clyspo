@@ -11,16 +11,10 @@ import Pricing from "./Pricing";
 import RecordingModes from "./RecordingModes";
 import Testimonials from "./Testimonials";
 
-interface HomePageProps {
-  serverHomepageCopyVariant?: string;
-}
-
-export const HomePage: React.FC<HomePageProps> = ({
-  serverHomepageCopyVariant = "",
-}) => {
+export const HomePage: React.FC = () => {
   return (
     <>
-      <Header serverHomepageCopyVariant={serverHomepageCopyVariant} />
+      <Header />
       <div className="space-y-[150px] lg:space-y-[200px]">
         <RecordingModes />
         <Features />

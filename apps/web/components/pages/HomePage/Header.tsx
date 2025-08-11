@@ -19,10 +19,6 @@ import { useState } from "react";
 import { homepageCopy } from "../../../data/homepage-copy";
 import VideoModal from "./VideoModal";
 
-interface HeaderProps {
-  serverHomepageCopyVariant?: string;
-}
-
 // Animation variants
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -50,21 +46,12 @@ const fadeInFromRight = {
   },
 };
 
-const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
+const Header = () => {
   const [videoToggled, setVideoToggled] = useState(false);
   const { platform, isIntel } = useDetectPlatform();
   const loading = platform === null;
 
-  const getHeaderContent = () => {
-    const variant =
-      serverHomepageCopyVariant as keyof typeof homepageCopy.header.variants;
-    return (
-      homepageCopy.header.variants[variant] ||
-      homepageCopy.header.variants.default
-    );
-  };
-
-  const headerContent = getHeaderContent();
+  const headerContent = homepageCopy.header.variants.default;
 
   return (
     <div className="mt-[100px] mb-10 sm:mb-[150px] min-h-screen w-full max-w-[1920px] overflow-x-hidden md:overflow-visible mx-auto md:mt-[20vh]">
