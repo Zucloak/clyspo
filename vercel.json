@@ -2,5 +2,6 @@
   "env": {
     "ENABLE_EXPERIMENTAL_COREPACK": "1"
   },
-  "installCommand": "pnpm install"
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm turbo run build"
 }
