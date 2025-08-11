@@ -1,17 +1,17 @@
 "use client";
 
-import { manageBilling } from "@/actions/organization/manage-billing";
+// import { manageBilling } from "@/actions/organization/manage-billing";
 import { useDashboardContext } from "@/app/(org)/dashboard/Contexts";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useCallback, useRef, useState } from "react";
 import { toast } from "sonner";
 
-import { BillingCard } from "./components/BillingCard";
-import { InviteDialog } from "./components/InviteDialog";
-import { MembersCard } from "./components/MembersCard";
-import { OrganizationDetailsCard } from "./components/OrganizationDetailsCard";
-import { SeatsInfoCards } from "./components/SeatsInfoCards";
-import CapSettingsCard from "./components/CapSettingsCard";
+// import { BillingCard } from "./components/BillingCard";
+// import { InviteDialog } from "./components/InviteDialog";
+// import { MembersCard } from "./components/MembersCard";
+// import { OrganizationDetailsCard } from "./components/OrganizationDetailsCard";
+// import { SeatsInfoCards } from "./components/SeatsInfoCards";
+// import CapSettingsCard from "./components/CapSettingsCard";
 
 export const
   Organization = () => {
@@ -33,57 +33,57 @@ export const
       }
     }, []);
 
-    const handleManageBilling = useCallback(
-      async (loadingDispatch: Dispatch<SetStateAction<boolean>>) => {
-        if (!isOwner) {
-          showOwnerToast();
-          return;
-        }
-        loadingDispatch(true);
-        try {
-          const url = await manageBilling();
-          router.push(url);
-        } catch (error) {
-          console.error("Error managing billing:", error);
-          toast.error("An error occurred while managing billing");
-          loadingDispatch(false);
-        }
-      },
-      [isOwner, showOwnerToast, router]
-    );
+    // const handleManageBilling = useCallback(
+    //   async (loadingDispatch: Dispatch<SetStateAction<boolean>>) => {
+    //     if (!isOwner) {
+    //       showOwnerToast();
+    //       return;
+    //     }
+    //     loadingDispatch(true);
+    //     try {
+    //       const url = await manageBilling();
+    //       router.push(url);
+    //     } catch (error) {
+    //       console.error("Error managing billing:", error);
+    //       toast.error("An error occurred while managing billing");
+    //       loadingDispatch(false);
+    //     }
+    //   },
+    //   [isOwner, showOwnerToast, router]
+    // );
 
     return (
       <form className="flex flex-col gap-6">
 
-        <SeatsInfoCards />
+        {/* <SeatsInfoCards /> */}
 
         <div className="flex flex-col gap-6 justify-center items-stretch xl:flex-row">
-          <OrganizationDetailsCard />
-          <CapSettingsCard />
+          {/* <OrganizationDetailsCard /> */}
+          {/* <CapSettingsCard /> */}
         </div>
 
 
-        <MembersCard
+        {/* <MembersCard
           isOwner={isOwner}
           loading={loading}
           handleManageBilling={() => handleManageBilling(setLoading)}
           showOwnerToast={showOwnerToast}
           setIsInviteDialogOpen={setIsInviteDialogOpen}
-        />
+        /> */}
 
-        <BillingCard
+        {/* <BillingCard
           isOwner={isOwner}
           loading={billingLoading}
           handleManageBilling={() => handleManageBilling(setBillingLoading)}
-        />
+        /> */}
 
-        <InviteDialog
+        {/* <InviteDialog
           isOpen={isInviteDialogOpen}
           setIsOpen={setIsInviteDialogOpen}
           isOwner={isOwner}
           showOwnerToast={showOwnerToast}
           handleManageBilling={() => handleManageBilling(setLoading)}
-        />
+        /> */}
       </form>
     );
   };

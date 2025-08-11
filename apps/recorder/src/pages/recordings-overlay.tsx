@@ -3,7 +3,7 @@ import Tooltip from "@corvu/tooltip";
 import { createElementBounds } from "@solid-primitives/bounds";
 import { makePersisted } from "@solid-primitives/storage";
 import { createMutation, createQuery } from "@tanstack/solid-query";
-import { convertFileSrc } from "@tauri-apps/api/core";
+// import { convertFileSrc } from "@tauri-apps/api/core";
 import { cx } from "cva";
 import {
   type Accessor,
@@ -26,10 +26,10 @@ import { TransitionGroup } from "solid-transition-group";
 import IconLucideClock from "~icons/lucide/clock";
 
 import { authStore } from "~/store";
-import { exportVideo } from "~/utils/export";
-import { commands, events, FramesRendered, UploadResult } from "~/utils/tauri";
+// import { exportVideo } from "~/utils/export";
+// import { commands, events, FramesRendered, UploadResult } from "~/utils/tauri";
 import { FPS, OUTPUT_SIZE } from "./editor/context";
-import { createTauriEventListener } from "~/utils/createEventListener";
+// import { createTauriEventListener } from "~/utils/createEventListener";
 
 type MediaEntry = {
   path: string;
@@ -39,394 +39,7 @@ type MediaEntry = {
 };
 
 export default function () {
-  onMount(() => {
-    document.documentElement.setAttribute("data-transparent-window", "true");
-    document.body.style.background = "transparent";
-  });
-
-  const [recordings, setRecordings] = makePersisted(
-    createStore<MediaEntry[]>([]),
-    { name: "recordings-store" }
-  );
-  const [screenshots, setScreenshots] = makePersisted(
-    createStore<MediaEntry[]>([]),
-    { name: "screenshots-store" }
-  );
-
-  const addMediaEntry = (path: string, type?: "recording" | "screenshot") => {
-    const setMedia = type === "screenshot" ? setScreenshots : setRecordings;
-    setMedia(
-      produce((state) => {
-        if (state.some((entry) => entry.path === path)) return;
-        const fileName = path.split("/").pop() || "";
-        const match = fileName.match(
-          /Cap (\d{4}-\d{2}-\d{2} at \d{2}\.\d{2}\.\d{2})/
-        );
-        const prettyName = match ? match[1].replace(/\./g, ":") : fileName;
-        state.unshift({ path, prettyName, isNew: true, type });
-      })
-    );
-
-    setTimeout(() => {
-      setMedia(
-        produce((state) => {
-          const index = state.findIndex((entry) => entry.path === path);
-          if (index !== -1) {
-            state[index].isNew = false;
-          }
-        })
-      );
-    }, 3000);
-  };
-
-  createTauriEventListener(events.newStudioRecordingAdded, (payload) => {
-    addMediaEntry(payload.path, "recording");
-  });
-
-  createTauriEventListener(events.newScreenshotAdded, (payload) => {
-    addMediaEntry(payload.path, "screenshot");
-  });
-
-  const allMedia = createMemo(() => [...recordings, ...screenshots]);
-
-  return (
-    <div
-      class="w-screen h-[100vh] bg-transparent relative overflow-y-hidden"
-      style={{
-        "scrollbar-color": "auto transparent",
-      }}
-    >
-      <div class="w-full relative left-0 bottom-0 flex flex-col-reverse pl-[40px] pb-[80px] gap-4 h-full overflow-y-auto scrollbar-none">
-        <div class="flex flex-col gap-4 pt-12 w-full">
-          <TransitionGroup
-            enterToClass="translate-y-0"
-            enterClass="opacity-0 translate-y-4"
-            exitToClass="opacity-0 -translate-x-1/2 ease-out"
-            exitClass="opacity-100 translate-x-0"
-            exitActiveClass="absolute"
-          >
-            <For each={allMedia()}>
-              {(media) => {
-                const [ref, setRef] = createSignal<HTMLElement | null>(null);
-
-                const type = media.type ?? "recording";
-                const isRecording = type !== "screenshot";
-
-                const { copy, save, upload, actionState } =
-                  createRecordingMutations(media, (e) => {
-                    if (e === "upgradeRequired") setShowUpgradeTooltip(true);
-                  });
-
-                const [metadata] = createResource(async () => {
-                  if (!isRecording) return null;
-
-                  const result = await commands
-                    .getVideoMetadata(media.path)
-                    .catch((e) => {
-                      console.error(`Failed to get metadata: ${e}`);
-                    });
-                  if (!result) return;
-
-                  const { duration, size } = result;
-                  // Calculate estimated export time (rough estimation: 1.5x real-time for 1080p)
-                  const estimatedExportTime = Math.ceil(duration * 1.5);
-                  console.log(
-                    `Metadata for ${media.path}: duration=${duration}, size=${size}, estimatedExport=${estimatedExportTime}`
-                  );
-
-                  return { duration, size, estimatedExportTime };
-                });
-
-                const [imageExists, setImageExists] = createSignal(true);
-                const [showUpgradeTooltip, setShowUpgradeTooltip] =
-                  createSignal(false);
-
-                const isLoading = () =>
-                  copy.isPending || save.isPending || upload.isPending;
-
-                createFakeWindowBounds(ref, () => media.path);
-
-                const recordingMeta = createQuery(() => ({
-                  queryKey: ["recordingMeta", media.path],
-                  queryFn: () => commands.getRecordingMeta(media.path, type),
-                }));
-
-                return (
-                  <Suspense>
-                    <div
-                      ref={setRef}
-                      style={{ "border-color": "rgba(255, 255, 255, 0.1)" }}
-                      class={cx(
-                        "overflow-hidden relative rounded-xl shadow transition-all duration-200 w-[260px] h-[150px] bg-gray-12 border-[1px] group"
-                      )}
-                    >
-                      <div
-                        class={cx(
-                          "w-full h-full flex relative bg-transparent z-10 overflow-hidden transition-all",
-                          isLoading() && "backdrop-blur bg-gray-12"
-                        )}
-                        style={{
-                          "pointer-events": "auto",
-                        }}
-                      >
-                        <Show
-                          when={imageExists()}
-                          fallback={
-                            <div class="absolute inset-0 w-full h-full pointer-events-none -z-10 bg-gray-10" />
-                          }
-                        >
-                          <img
-                            class="pointer-events-none w-full h-full object-cover absolute inset-0 -z-10 rounded-[7.4px]"
-                            alt="media preview"
-                            src={`${convertFileSrc(
-                              isRecording
-                                ? `${media.path}/screenshots/display.jpg`
-                                : `${media.path}`
-                            )}?t=${Date.now()}`}
-                            onError={() => setImageExists(false)}
-                          />
-                        </Show>
-
-                        <Switch>
-                          <Match
-                            when={
-                              actionState.type === "copy" && actionState.state
-                            }
-                            keyed
-                          >
-                            {(state) => (
-                              <ActionProgressOverlay
-                                title={
-                                  state.type === "rendering"
-                                    ? "Rendering video"
-                                    : state.type === "copying"
-                                    ? "Copying to clipboard"
-                                    : "Copied to clipboard"
-                                }
-                                progressPercentage={actionProgressPercentage(
-                                  actionState
-                                )}
-                              />
-                            )}
-                          </Match>
-                          <Match
-                            when={
-                              actionState.type === "save" && actionState.state
-                            }
-                            keyed
-                          >
-                            {(state) => (
-                              <ActionProgressOverlay
-                                title={(() => {
-                                  if (state.type === "choosing-location")
-                                    return "Preparing";
-
-                                  if (isRecording) {
-                                    if (state.type === "rendering")
-                                      return "Rendering video";
-                                    if (state.type === "saving")
-                                      return "Saving video";
-                                    return "Saved video";
-                                  } else {
-                                    if (state.type === "rendering")
-                                      return "Rendering image";
-                                    if (state.type === "saving")
-                                      return "Saving image";
-                                    return "Saved image";
-                                  }
-                                })()}
-                                progressPercentage={actionProgressPercentage(
-                                  actionState
-                                )}
-                                progressMessage={
-                                  state.type === "choosing-location" &&
-                                  `Choose where to ${
-                                    isRecording ? "export video" : "save image"
-                                  }...`
-                                }
-                              />
-                            )}
-                          </Match>
-                          <Match
-                            when={
-                              actionState.type === "upload" && actionState.state
-                            }
-                            keyed
-                          >
-                            {(state) => (
-                              <ActionProgressOverlay
-                                title={
-                                  state.type === "rendering"
-                                    ? "Rendering video"
-                                    : state.type === "uploading"
-                                    ? "Creating shareable link"
-                                    : "Shareable link copied"
-                                }
-                                progressPercentage={actionProgressPercentage(
-                                  actionState
-                                )}
-                              />
-                            )}
-                          </Match>
-                        </Switch>
-
-                        <div
-                          style={{
-                            "background-color": "rgba(0, 0, 0, 0.4)",
-                          }}
-                          class={cx(
-                            "absolute inset-0 transition-all duration-150 pointer-events-auto rounded-[7.4px] dark:text-gray-100",
-                            showUpgradeTooltip()
-                              ? "opacity-100"
-                              : "opacity-0 group-hover:opacity-100",
-                            "backdrop-blur p-2"
-                          )}
-                        >
-                          <TooltipIconButton
-                            class="absolute top-3 left-3 z-20"
-                            tooltipText="Close"
-                            tooltipPlacement="right"
-                            onClick={() => {
-                              const setMedia = isRecording
-                                ? setRecordings
-                                : setScreenshots;
-                              setMedia(
-                                produce((state) => {
-                                  const index = state.findIndex(
-                                    (entry) => entry.path === media.path
-                                  );
-                                  if (index !== -1) {
-                                    state.splice(index, 1);
-                                  }
-                                })
-                              );
-                            }}
-                          >
-                            <IconCapCircleX class="size-[1rem]" />
-                          </TooltipIconButton>
-                          {isRecording ? (
-                            <TooltipIconButton
-                              class="absolute bottom-3 left-3 z-20"
-                              tooltipText="Edit"
-                              tooltipPlacement="right"
-                              onClick={() => {
-                                const setMedia = isRecording
-                                  ? setRecordings
-                                  : setScreenshots;
-                                setMedia(
-                                  produce((state) => {
-                                    const index = state.findIndex(
-                                      (entry) => entry.path === media.path
-                                    );
-                                    if (index !== -1) {
-                                      state.splice(index, 1);
-                                    }
-                                  })
-                                );
-                                commands.showWindow({
-                                  Editor: { project_path: media.path },
-                                });
-                              }}
-                            >
-                              <IconCapEditor class="size-[1rem]" />
-                            </TooltipIconButton>
-                          ) : (
-                            <TooltipIconButton
-                              class="absolute bottom-3 left-3 z-20"
-                              tooltipText="View"
-                              tooltipPlacement="right"
-                              onClick={() => {
-                                commands.openFilePath(media.path);
-                              }}
-                            >
-                              <IconLucideEye class="size-[1rem]" />
-                            </TooltipIconButton>
-                          )}
-                          <TooltipIconButton
-                            class="absolute top-3 right-3 z-20"
-                            tooltipText={
-                              copy.isPending
-                                ? "Copying to Clipboard"
-                                : "Copy to Clipboard"
-                            }
-                            tooltipPlacement="left"
-                            onClick={() => copy.mutate()}
-                          >
-                            <IconCapCopy class="size-[1rem]" />
-                          </TooltipIconButton>
-                          <TooltipIconButton
-                            class="absolute right-3 bottom-3 z-[998]"
-                            tooltipText={
-                              recordingMeta.data?.sharing
-                                ? "Copy Shareable Link"
-                                : "Create Shareable Link"
-                            }
-                            tooltipPlacement="left"
-                            onClick={() => upload.mutate()}
-                          >
-                            <IconCapUpload class="size-[1rem]" />
-                          </TooltipIconButton>
-                          <div class="flex absolute inset-0 justify-center items-center">
-                            <Button
-                              variant="white"
-                              size="sm"
-                              onClick={() => save.mutate()}
-                            >
-                              Export
-                            </Button>
-                          </div>
-                        </div>
-                        <Show when={metadata.latest}>
-                          {(metadata) => (
-                            <div
-                              style={{
-                                "font-size": "12px",
-                                "border-end-end-radius": "7.4px",
-                                "border-end-start-radius": "7.4px",
-                              }}
-                              class={cx(
-                                "absolute bottom-0 left-0 right-0 font-medium text-gray-4 bg-[#00000080] backdrop-blur-lg px-3 py-2 flex justify-between items-center pointer-events-none transition-all max-w-full overflow-hidden",
-                                isLoading() || showUpgradeTooltip()
-                                  ? "opacity-0"
-                                  : "group-hover:opacity-0"
-                              )}
-                            >
-                              <span class="flex items-center">
-                                <IconCapCamera class="w-[16px] h-[16px] mr-1.5" />
-                                {Math.floor(metadata().duration / 60)}:
-                                {Math.floor(metadata().duration % 60)
-                                  .toString()
-                                  .padStart(2, "0")}
-                              </span>
-                              <span class="flex items-center">
-                                <IconLucideHardDrive class="w-[16px] h-[16px] mr-1.5" />
-                                {metadata().size.toFixed(2)} MB
-                              </span>
-                              <span class="flex items-center">
-                                <IconLucideClock class="w-[16px] h-[16px] mr-1.5" />
-                                ~
-                                {Math.floor(
-                                  metadata().estimatedExportTime / 60
-                                )}
-                                :
-                                {Math.floor(metadata().estimatedExportTime % 60)
-                                  .toString()
-                                  .padStart(2, "0")}
-                              </span>
-                            </div>
-                          )}
-                        </Show>
-                      </div>
-                    </div>
-                  </Suspense>
-                );
-              }}
-            </For>
-          </TransitionGroup>
-        </div>
-      </div>
-    </div>
-  );
+  return null;
 }
 
 function ActionProgressOverlay(props: {
@@ -554,19 +167,19 @@ function createRecordingMutations(
   }));
 
   // just a wrapper of exportVideo to provide base settings
-  const exportWithDefaultSettings = (
-    onProgress: (progress: FramesRendered) => void
-  ) =>
-    exportVideo(
-      media.path,
-      {
-        format: "Mp4",
-        fps: FPS,
-        resolution_base: OUTPUT_SIZE,
-        compression: "Web",
-      },
-      onProgress
-    );
+  // const exportWithDefaultSettings = (
+  //   onProgress: (progress: FramesRendered) => void
+  // ) =>
+  //   exportVideo(
+  //     media.path,
+  //     {
+  //       format: "Mp4",
+  //       fps: FPS,
+  //       resolution_base: OUTPUT_SIZE,
+  //       compression: "Web",
+  //     },
+  //     onProgress
+  //   );
 
   const copy = createMutation(() => ({
     mutationFn: async () => {

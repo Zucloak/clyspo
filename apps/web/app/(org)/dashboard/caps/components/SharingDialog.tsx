@@ -18,7 +18,7 @@ import { Check, Search, Globe2 } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { shareCap } from "@/actions/caps/share";
+// import { shareCap } from "@/actions/caps/share";
 import { useDashboardContext } from "@/app/(org)/dashboard/Contexts";
 import { Spaces } from "@/app/(org)/dashboard/dashboard-data";
 
@@ -98,59 +98,53 @@ export const SharingDialog: React.FC<SharingDialogProps> = ({
   };
 
   const handleSave = async () => {
-    try {
-      setLoading(true);
-      const result = await shareCap({
-        capId,
-        spaceIds: Array.from(selectedSpaces),
-        public: publicToggle,
-      });
-
-      if (!result.success) {
-        throw new Error(result.error || "Failed to update sharing settings");
-      }
-
-      const newSelectedSpaces = Array.from(selectedSpaces);
-      const initialSpaces = Array.from(initialSelectedSpaces);
-
-      const addedSpaceIds = newSelectedSpaces.filter(
-        (id) => !initialSpaces.includes(id)
-      );
-      const removedSpaceIds = initialSpaces.filter(
-        (id) => !newSelectedSpaces.includes(id)
-      );
-
-      const publicChanged = publicToggle !== initialPublicState;
-
-      const getSpaceName = (id: string) => {
-        const space = spacesData?.find((space) => space.id === id);
-        return space?.name || `Space ${id}`;
-      };
-
-      if (publicChanged && addedSpaceIds.length === 0 && removedSpaceIds.length === 0) {
-        toast.success(publicToggle ? "Video is now public" : "Video is now private");
-      } else if (addedSpaceIds.length === 1 && removedSpaceIds.length === 0 && !publicChanged) {
-        toast.success(`Shared to ${getSpaceName(addedSpaceIds[0] as string)}`);
-      } else if (removedSpaceIds.length === 1 && addedSpaceIds.length === 0 && !publicChanged) {
-        toast.success(
-          `Unshared from ${getSpaceName(removedSpaceIds[0] as string)}`
-        );
-      } else if (addedSpaceIds.length > 0 && removedSpaceIds.length === 0 && !publicChanged) {
-        toast.success(`Shared to ${addedSpaceIds.length} spaces`);
-      } else if (removedSpaceIds.length > 0 && addedSpaceIds.length === 0 && !publicChanged) {
-        toast.success(`Unshared from ${removedSpaceIds.length} spaces`);
-      } else if (addedSpaceIds.length > 0 || removedSpaceIds.length > 0 || publicChanged) {
-        toast.success(`Sharing settings updated`);
-      } else {
-        toast.info("No changes to sharing settings");
-      }
-      onSharingUpdated(newSelectedSpaces);
-      onClose();
-    } catch (error) {
-      toast.error("Failed to update sharing settings");
-    } finally {
-      setLoading(false);
-    }
+    // try {
+    //   setLoading(true);
+    //   const result = await shareCap({
+    //     capId,
+    //     spaceIds: Array.from(selectedSpaces),
+    //     public: publicToggle,
+    //   });
+    //   if (!result.success) {
+    //     throw new Error(result.error || "Failed to update sharing settings");
+    //   }
+    //   const newSelectedSpaces = Array.from(selectedSpaces);
+    //   const initialSpaces = Array.from(initialSelectedSpaces);
+    //   const addedSpaceIds = newSelectedSpaces.filter(
+    //     (id) => !initialSpaces.includes(id)
+    //   );
+    //   const removedSpaceIds = initialSpaces.filter(
+    //     (id) => !newSelectedSpaces.includes(id)
+    //   );
+    //   const publicChanged = publicToggle !== initialPublicState;
+    //   const getSpaceName = (id: string) => {
+    //     const space = spacesData?.find((space) => space.id === id);
+    //     return space?.name || `Space ${id}`;
+    //   };
+    //   if (publicChanged && addedSpaceIds.length === 0 && removedSpaceIds.length === 0) {
+    //     toast.success(publicToggle ? "Video is now public" : "Video is now private");
+    //   } else if (addedSpaceIds.length === 1 && removedSpaceIds.length === 0 && !publicChanged) {
+    //     toast.success(`Shared to ${getSpaceName(addedSpaceIds[0] as string)}`);
+    //   } else if (removedSpaceIds.length === 1 && addedSpaceIds.length === 0 && !publicChanged) {
+    //     toast.success(
+    //       `Unshared from ${getSpaceName(removedSpaceIds[0] as string)}`
+    //     );
+    //   } else if (addedSpaceIds.length > 0 && removedSpaceIds.length === 0 && !publicChanged) {
+    //     toast.success(`Shared to ${addedSpaceIds.length} spaces`);
+    //   } else if (removedSpaceIds.length > 0 && addedSpaceIds.length === 0 && !publicChanged) {
+    //     toast.success(`Unshared from ${removedSpaceIds.length} spaces`);
+    //   } else if (addedSpaceIds.length > 0 || removedSpaceIds.length > 0 || publicChanged) {
+    //     toast.success(`Sharing settings updated`);
+    //   } else {
+    //     toast.info("No changes to sharing settings");
+    //   }
+    //   onSharingUpdated(newSelectedSpaces);
+    //   onClose();
+    // } catch (error) {
+    //   toast.error("Failed to update sharing settings");
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   const handleCopyEmbedCode = async () => {

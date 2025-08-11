@@ -21,10 +21,10 @@ import { useForm } from "react-hook-form";
 import { useState, useRef } from "react";
 import { toast } from "sonner";
 import { FileInput } from "@/components/FileInput";
-import { createSpace } from "./server";
+// import { createSpace } from "./server";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLayerGroup } from "@fortawesome/free-solid-svg-icons";
-import { updateSpace } from "@/actions/organization/update-space";
+// import { updateSpace } from "@/actions/organization/update-space";
 import { MemberSelect } from "../../spaces/[spaceId]/components/MemberSelect";
 import { useDashboardContext } from "../../Contexts";
 
@@ -182,18 +182,18 @@ export const NewSpaceForm: React.FC<NewSpaceFormProps> = (props) => {
               });
             }
 
-            if (edit && space?.id) {
-              formData.append("id", space.id);
-              // If the user removed the icon, send a removeIcon flag
-              if (selectedFile === null && space.iconUrl) {
-                formData.append("removeIcon", "true");
-              }
-              await updateSpace(formData);
-              toast.success("Space updated successfully");
-            } else {
-              await createSpace(formData);
-              toast.success("Space created successfully");
-            }
+            // if (edit && space?.id) {
+            //   formData.append("id", space.id);
+            //   // If the user removed the icon, send a removeIcon flag
+            //   if (selectedFile === null && space.iconUrl) {
+            //     formData.append("removeIcon", "true");
+            //   }
+            //   await updateSpace(formData);
+            //   toast.success("Space updated successfully");
+            // } else {
+            //   await createSpace(formData);
+            //   toast.success("Space created successfully");
+            // }
 
             form.reset();
             setSelectedFile(null);

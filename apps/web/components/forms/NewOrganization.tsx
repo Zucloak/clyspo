@@ -11,7 +11,7 @@ import {
   Label,
 } from "@cap/ui";
 import { useForm } from "react-hook-form";
-import { createOrganization } from "./server";
+// import { createOrganization } from "./server";
 import { useState } from "react";
 import { toast } from "sonner";
 import { FileInput } from "@/components/FileInput";
@@ -43,30 +43,30 @@ export const NewOrganization: React.FC<NewOrganizationProps> = (props) => {
       <form
         className="space-y-4"
         ref={props.formRef}
-        onSubmit={form.handleSubmit(async (values) => {
-          try {
-            props.setCreateLoading?.(true);
+        // onSubmit={form.handleSubmit(async (values) => {
+        //   try {
+        //     props.setCreateLoading?.(true);
 
-            // Create FormData to send both the organization name and icon file
-            const formData = new FormData();
-            formData.append("name", values.name);
+        //     // Create FormData to send both the organization name and icon file
+        //     const formData = new FormData();
+        //     formData.append("name", values.name);
 
-            // Add the icon file if one was selected
-            if (selectedFile) {
-              formData.append("icon", selectedFile);
-              setIsUploading(true);
-            }
+        //     // Add the icon file if one was selected
+        //     if (selectedFile) {
+        //       formData.append("icon", selectedFile);
+        //       setIsUploading(true);
+        //     }
 
-            await createOrganization(formData);
-            props.onOrganizationCreated();
-          } catch (error) {
-            console.error("Error creating organization:", error);
-            error instanceof Error ? toast.error(error.message) : toast.error("Failed to create organization");
-          } finally {
-            setIsUploading(false);
-            props.setCreateLoading?.(false);
-          }
-        })}
+        //     await createOrganization(formData);
+        //     props.onOrganizationCreated();
+        //   } catch (error) {
+        //     console.error("Error creating organization:", error);
+        //     error instanceof Error ? toast.error(error.message) : toast.error("Failed to create organization");
+        //   } finally {
+        //     setIsUploading(false);
+        //     props.setCreateLoading?.(false);
+        //   }
+        // })}
       >
         <div className="space-y-4">
           <FormField

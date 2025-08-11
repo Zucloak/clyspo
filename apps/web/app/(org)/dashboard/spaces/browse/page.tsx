@@ -11,65 +11,65 @@ import { useRouter } from "next/navigation";
 import { ConfirmationDialog } from "../../_components/ConfirmationDialog";
 import SpaceDialog from "../../_components/Navbar/SpaceDialog";
 
-import { deleteSpace } from "@/actions/organization/delete-space";
+// import { deleteSpace } from "@/actions/organization/delete-space";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { useDashboardContext } from "../../Contexts";
 import { Spaces } from "../../dashboard-data";
 
 export default function BrowseSpacesPage() {
-  const { spacesData, user, activeOrganization } = useDashboardContext();
-  const [showSpaceDialog, setShowSpaceDialog] = useState(false);
-  const [editSpace, setEditSpace] = useState<any | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
+  // const { spacesData, user, activeOrganization } = useDashboardContext();
+  // const [showSpaceDialog, setShowSpaceDialog] = useState(false);
+  // const [editSpace, setEditSpace] = useState<any | null>(null);
+  // const [searchQuery, setSearchQuery] = useState("");
 
-  const trueActiveOrgMembers = activeOrganization?.members.filter((m) => m.user?.id !== user?.id);
+  // const trueActiveOrgMembers = activeOrganization?.members.filter((m) => m.user?.id !== user?.id);
 
 
-  const filteredSpaces = spacesData?.filter((space: Spaces) =>
-    space.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  const router = useRouter();
-  const params = useParams();
+  // const filteredSpaces = spacesData?.filter((space: Spaces) =>
+  //   space.name.toLowerCase().includes(searchQuery.toLowerCase())
+  // );
+  // const router = useRouter();
+  // const params = useParams();
 
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const [pendingDeleteSpace, setPendingDeleteSpace] = useState<Spaces | null>(null);
-  const [removing, setRemoving] = useState(false);
+  // const [confirmOpen, setConfirmOpen] = useState(false);
+  // const [pendingDeleteSpace, setPendingDeleteSpace] = useState<Spaces | null>(null);
+  // const [removing, setRemoving] = useState(false);
 
-  const handleDeleteSpace = (e: React.MouseEvent, space: Spaces) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setPendingDeleteSpace(space);
-    setConfirmOpen(true);
-  };
+  // const handleDeleteSpace = (e: React.MouseEvent, space: Spaces) => {
+  //   e.preventDefault();
+  //   e.stopPropagation();
+  //   setPendingDeleteSpace(space);
+  //   setConfirmOpen(true);
+  // };
 
-  const confirmRemoveSpace = async () => {
-    if (!pendingDeleteSpace) return;
-    setRemoving(true);
-    try {
-      const result = await deleteSpace(pendingDeleteSpace.id);
-      if (result.success) {
-        toast.success("Space deleted successfully");
-        router.refresh();
-        if (params.spaceId === pendingDeleteSpace.id) {
-          router.push("/dashboard");
-        }
-      } else {
-        toast.error(result.error || "Failed to delete space");
-      }
-    } catch (error) {
-      console.error("Error deleting space:", error);
-      toast.error("Failed to delete space");
-    } finally {
-      setRemoving(false);
-      setConfirmOpen(false);
-      setPendingDeleteSpace(null);
-    }
-  };
+  // const confirmRemoveSpace = async () => {
+  //   if (!pendingDeleteSpace) return;
+  //   setRemoving(true);
+  //   try {
+  //     const result = await deleteSpace(pendingDeleteSpace.id);
+  //     if (result.success) {
+  //       toast.success("Space deleted successfully");
+  //       router.refresh();
+  //       if (params.spaceId === pendingDeleteSpace.id) {
+  //         router.push("/dashboard");
+  //       }
+  //     } else {
+  //       toast.error(result.error || "Failed to delete space");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting space:", error);
+  //     toast.error("Failed to delete space");
+  //   } finally {
+  //     setRemoving(false);
+  //     setConfirmOpen(false);
+  //     setPendingDeleteSpace(null);
+  //   }
+  // };
 
   return (
     <>
-      <div className="flex flex-wrap gap-3 justify-between items-start w-full">
+      {/* <div className="flex flex-wrap gap-3 justify-between items-start w-full">
         <Button
           onClick={() => setShowSpaceDialog(true)}
           size="sm"
@@ -214,7 +214,7 @@ export default function BrowseSpacesPage() {
         space={editSpace}
         onSpaceUpdated={() => {
           setShowSpaceDialog(false);
-          setEditSpace(null);
+          setEditSpace(null);.
           router.refresh();
         }}
       />
@@ -231,7 +231,7 @@ export default function BrowseSpacesPage() {
           setConfirmOpen(false);
           setPendingDeleteSpace(null);
         }}
-      />
+      /> */}
     </>
   );
 }

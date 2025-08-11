@@ -18,7 +18,7 @@ import { useClickAway } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { AnimatePresence } from "framer-motion";
 import { MoreVertical } from "lucide-react";
-import { signOut } from "next-auth/react";
+// import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -166,7 +166,7 @@ export default function DashboardInner({
               icon={theme === "dark" ? faMoon : faSun}
             />
           </div>
-          <User />
+          {/* <User /> */}
         </div>
       </div>
       <main
@@ -188,132 +188,132 @@ export default function DashboardInner({
   );
 }
 
-const User = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
-  const { user, isSubscribed } = useDashboardContext();
+// const User = () => {
+//   const [menuOpen, setMenuOpen] = useState(false);
+//   const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
+//   const { user, isSubscribed } = useDashboardContext();
 
-  const menuItems = useMemo(
-    () => [
-      {
-        name: "Homepage",
-        icon: <HomeIcon />,
-        href: "/home",
-        onClick: () => setMenuOpen(false),
-        iconClassName: "text-gray-11 group-hover:text-gray-12",
-        showCondition: true,
-      },
-      {
-        name: "Upgrade to Pro",
-        icon: <ArrowUpIcon />,
-        onClick: () => {
-          setMenuOpen(false);
-          setUpgradeModalOpen(true);
-        },
-        iconClassName: "text-amber-400 group-hover:text-amber-500",
-        showCondition: !isSubscribed && buildEnv.NEXT_PUBLIC_IS_CAP,
-      },
-      {
-        name: "Earn 40% Referral",
-        icon: <ReferIcon />,
-        href: "/dashboard/refer",
-        onClick: () => setMenuOpen(false),
-        iconClassName: "text-gray-11 group-hover:text-gray-12",
-        showCondition: buildEnv.NEXT_PUBLIC_IS_CAP,
-      },
-      {
-        name: "Settings",
-        icon: <SettingsGearIcon />,
-        href: "/dashboard/settings/account",
-        onClick: () => setMenuOpen(false),
-        iconClassName: "text-gray-11 group-hover:text-gray-12",
-        showCondition: true,
-      },
-      {
-        name: "Chat Support",
-        icon: <MessageCircleMoreIcon />,
-        onClick: () => window.open("https://cap.link/discord", "_blank"),
-        iconClassName: "text-gray-11 group-hover:text-gray-12",
-        showCondition: true,
-      },
-      {
-        name: "Download App",
-        icon: <DownloadIcon />,
-        onClick: () => window.open("https://cap.so/download", "_blank"),
-        iconClassName: "text-gray-11 group-hover:text-gray-12",
-        showCondition: true,
-      },
-      {
-        name: "Sign Out",
-        icon: <LogoutIcon />,
-        onClick: () => signOut(),
-        iconClassName: "text-gray-11 group-hover:text-gray-12",
-        showCondition: true,
-      },
-    ],
-    []
-  );
+//   const menuItems = useMemo(
+//     () => [
+//       {
+//         name: "Homepage",
+//         icon: <HomeIcon />,
+//         href: "/home",
+//         onClick: () => setMenuOpen(false),
+//         iconClassName: "text-gray-11 group-hover:text-gray-12",
+//         showCondition: true,
+//       },
+//       {
+//         name: "Upgrade to Pro",
+//         icon: <ArrowUpIcon />,
+//         onClick: () => {
+//           setMenuOpen(false);
+//           setUpgradeModalOpen(true);
+//         },
+//         iconClassName: "text-amber-400 group-hover:text-amber-500",
+//         showCondition: !isSubscribed && buildEnv.NEXT_PUBLIC_IS_CAP,
+//       },
+//       {
+//         name: "Earn 40% Referral",
+//         icon: <ReferIcon />,
+//         href: "/dashboard/refer",
+//         onClick: () => setMenuOpen(false),
+//         iconClassName: "text-gray-11 group-hover:text-gray-12",
+//         showCondition: buildEnv.NEXT_PUBLIC_IS_CAP,
+//       },
+//       {
+//         name: "Settings",
+//         icon: <SettingsGearIcon />,
+//         href: "/dashboard/settings/account",
+//         onClick: () => setMenuOpen(false),
+//         iconClassName: "text-gray-11 group-hover:text-gray-12",
+//         showCondition: true,
+//       },
+//       {
+//         name: "Chat Support",
+//         icon: <MessageCircleMoreIcon />,
+//         onClick: () => window.open("https://cap.link/discord", "_blank"),
+//         iconClassName: "text-gray-11 group-hover:text-gray-12",
+//         showCondition: true,
+//       },
+//       {
+//         name: "Download App",
+//         icon: <DownloadIcon />,
+//         onClick: () => window.open("https://cap.so/download", "_blank"),
+//         iconClassName: "text-gray-11 group-hover:text-gray-12",
+//         showCondition: true,
+//       },
+//       {
+//         name: "Sign Out",
+//         icon: <LogoutIcon />,
+//         onClick: () => signOut(),
+//         iconClassName: "text-gray-11 group-hover:text-gray-12",
+//         showCondition: true,
+//       },
+//     ],
+//     []
+//   );
 
-  return (
-    <>
-      <UpgradeModal
-        open={upgradeModalOpen}
-        onOpenChange={setUpgradeModalOpen}
-      />
-      <Popover open={menuOpen} onOpenChange={setMenuOpen}>
-        <PopoverTrigger asChild>
-          <div
-            data-state={menuOpen ? "open" : "closed"}
-            className="flex gap-2 justify-between  items-center p-2 rounded-xl border data-[state=open]:border-gray-3 data-[state=open]:bg-gray-3 border-transparent transition-colors cursor-pointer group lg:gap-6 hover:border-gray-3"
-          >
-            <div className="flex items-center">
-              {user.image ? (
-                <Image
-                  src={user.image}
-                  alt={user.name ?? "User"}
-                  width={24}
-                  height={24}
-                  className="rounded-full"
-                />
-              ) : (
-                <Avatar
-                  letterClass="text-xs lg:text-md"
-                  name={user.name ?? "User"}
-                  className="size-[24px] text-gray-12"
-                />
-              )}
-              <span className="ml-2 text-sm truncate lg:ml-2 lg:text-md text-gray-12">
-                {user.name ?? "User"}
-              </span>
-            </div>
-            <MoreVertical
-              data-state={menuOpen ? "open" : "closed"}
-              className="w-5 h-5 data-[state=open]:text-gray-12 transition-colors text-gray-10 group-hover:text-gray-12"
-            />
-          </div>
-        </PopoverTrigger>
-        <PopoverContent className="p-1 w-48">
-          <Command>
-            <CommandGroup>
-              {menuItems
-                .filter((item) => item.showCondition)
-                .map((item, index) => (
-                  <MenuItem
-                    key={index}
-                    icon={item.icon}
-                    name={item.name}
-                    href={item.href ?? "#"}
-                    onClick={item.onClick}
-                    iconClassName={item.iconClassName}
-                  />
-                ))}
-            </CommandGroup>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    </>
-  );
-};
+//   return (
+//     <>
+//       <UpgradeModal
+//         open={upgradeModalOpen}
+//         onOpenChange={setUpgradeModalOpen}
+//       />
+//       <Popover open={menuOpen} onOpenChange={setMenuOpen}>
+//         <PopoverTrigger asChild>
+//           <div
+//             data-state={menuOpen ? "open" : "closed"}
+//             className="flex gap-2 justify-between  items-center p-2 rounded-xl border data-[state=open]:border-gray-3 data-[state=open]:bg-gray-3 border-transparent transition-colors cursor-pointer group lg:gap-6 hover:border-gray-3"
+//           >
+//             <div className="flex items-center">
+//               {user.image ? (
+//                 <Image
+//                   src={user.image}
+//                   alt={user.name ?? "User"}
+//                   width={24}
+//                   height={24}
+//                   className="rounded-full"
+//                 />
+//               ) : (
+//                 <Avatar
+//                   letterClass="text-xs lg:text-md"
+//                   name={user.name ?? "User"}
+//                   className="size-[24px] text-gray-12"
+//                 />
+//               )}
+//               <span className="ml-2 text-sm truncate lg:ml-2 lg:text-md text-gray-12">
+//                 {user.name ?? "User"}
+//               </span>
+//             </div>
+//             <MoreVertical
+//               data-state={menuOpen ? "open" : "closed"}
+//               className="w-5 h-5 data-[state=open]:text-gray-12 transition-colors text-gray-10 group-hover:text-gray-12"
+//             />
+//           </div>
+//         </PopoverTrigger>
+//         <PopoverContent className="p-1 w-48">
+//           <Command>
+//             <CommandGroup>
+//               {menuItems
+//                 .filter((item) => item.showCondition)
+//                 .map((item, index) => (
+//                   <MenuItem
+//                     key={index}
+//                     icon={item.icon}
+//                     name={item.name}
+//                     href={item.href ?? "#"}
+//                     onClick={item.onClick}
+//                     iconClassName={item.iconClassName}
+//                   />
+//                 ))}
+//             </CommandGroup>
+//           </Command>
+//         </PopoverContent>
+//       </Popover>
+//     </>
+//   );
+// };
 
 interface Props {
   icon: React.ReactElement;

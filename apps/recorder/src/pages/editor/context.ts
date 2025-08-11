@@ -16,20 +16,20 @@ import {
 import { createStore, produce, reconcile, unwrap } from "solid-js/store";
 
 import { createPresets } from "~/utils/createPresets";
-import { createCustomDomainQuery } from "~/utils/queries";
+// import { createCustomDomainQuery } from "~/utils/queries";
 import { createImageDataWS, createLazySignal } from "~/utils/socket";
-import {
-  commands,
-  events,
-  FramesRendered,
-  MultipleSegments,
-  RecordingMeta,
-  SingleSegment,
-  type ProjectConfiguration,
-  type SerializedEditorInstance,
-  type XY,
-} from "~/utils/tauri";
-import { createProgressBar } from "./utils";
+// import {
+//   commands,
+//   events,
+//   FramesRendered,
+//   MultipleSegments,
+//   RecordingMeta,
+//   SingleSegment,
+//   type ProjectConfiguration,
+//   type SerializedEditorInstance,
+//   type XY,
+// } from "~/utils/tauri";
+// import { createProgressBar } from "./utils";
 
 export type CurrentDialog =
   | { type: "createPreset" }
@@ -140,17 +140,17 @@ export const [EditorContextProvider, useEditorContext] = createContextProvider(
       },
     };
 
-    createEffect(
-      on(
-        () => {
-          trackStore(project);
-        },
-        debounce(() => {
-          commands.setProjectConfig(project);
-        }),
-        { defer: true }
-      )
-    );
+    // createEffect(
+    //   on(
+    //     () => {
+    //       trackStore(project);
+    //     },
+    //     debounce(() => {
+    //       commands.setProjectConfig(project);
+    //     }),
+    //     { defer: true }
+    //   )
+    // );
 
     const [dialog, setDialog] = createSignal<DialogState>({
       open: false,
@@ -177,25 +177,25 @@ export const [EditorContextProvider, useEditorContext] = createContextProvider(
         )
     >({ type: "idle" });
 
-    createProgressBar(() =>
-      exportState?.type === "rendering"
-        ? (exportState.progress.renderedCount /
-            exportState.progress.totalFrames) *
-          100
-        : undefined
-    );
+    // createProgressBar(() =>
+    //   exportState?.type === "rendering"
+    //     ? (exportState.progress.renderedCount /
+    //         exportState.progress.totalFrames) *
+    //       100
+    //     : undefined
+    // );
 
-    createEffect(
-      on(
-        () => editorState.playing,
-        (active) => {
-          if (!active)
-            commands.setPlayheadPosition(
-              Math.floor(editorState.playbackTime * FPS)
-            );
-        }
-      )
-    );
+    // createEffect(
+    //   on(
+    //     () => editorState.playing,
+    //     (active) => {
+    //       if (!active)
+    //         commands.setPlayheadPosition(
+    //           Math.floor(editorState.playbackTime * FPS)
+    //         );
+    //     }
+    //   )
+    // );
 
     const totalDuration = () =>
       project.timeline?.segments.reduce(
@@ -275,18 +275,18 @@ export const [EditorContextProvider, useEditorContext] = createContextProvider(
       },
     });
 
-    const [micWaveforms] = createResource(() => commands.getMicWaveforms());
-    const [systemAudioWaveforms] = createResource(() =>
-      commands.getSystemAudioWaveforms()
-    );
-    const customDomain = createCustomDomainQuery();
+    // const [micWaveforms] = createResource(() => commands.getMicWaveforms());
+    // const [systemAudioWaveforms] = createResource(() =>
+    //   commands.getSystemAudioWaveforms()
+    // );
+    // const customDomain = createCustomDomainQuery();
 
     return {
       ...editorInstanceContext,
       meta() {
         return props.meta();
       },
-      customDomain,
+      // customDomain,
       refetchMeta: () => props.refetchMeta(),
       editorInstance: props.editorInstance,
       dialog,
@@ -353,46 +353,46 @@ export type TransformedMeta = ReturnType<typeof transformMeta>;
 
 export const [EditorInstanceContextProvider, useEditorInstanceContext] =
   createContextProvider(() => {
-    const [latestFrame, setLatestFrame] = createLazySignal<{
-      width: number;
-      data: ImageData;
-    }>();
+    // const [latestFrame, setLatestFrame] = createLazySignal<{
+    //   width: number;
+    //   data: ImageData;
+    // }>();
 
-    const [editorInstance] = createResource(async () => {
-      const instance = await commands.createEditorInstance();
+    // const [editorInstance] = createResource(async () => {
+    //   const instance = await commands.createEditorInstance();
 
-      const [_ws, isConnected] = createImageDataWS(
-        instance.framesSocketUrl,
-        setLatestFrame
-      );
+    //   const [_ws, isConnected] = createImageDataWS(
+    //     instance.framesSocketUrl,
+    //     setLatestFrame
+    //   );
 
-      createEffect(() => {
-        if (isConnected()) {
-          events.renderFrameEvent.emit({
-            frame_number: Math.floor(0),
-            fps: FPS,
-            resolution_base: OUTPUT_SIZE,
-          });
-        }
-      });
+    //   createEffect(() => {
+    //     if (isConnected()) {
+    //       events.renderFrameEvent.emit({
+    //         frame_number: Math.floor(0),
+    //         fps: FPS,
+    //         resolution_base: OUTPUT_SIZE,
+    //       });
+    //     }
+    //   });
 
-      return instance;
-    });
+    //   return instance;
+    // });
 
-    const metaQuery = createQuery(() => ({
-      queryKey: ["editor", "meta"],
-      queryFn: editorInstance()
-        ? () => commands.getEditorMeta().then(transformMeta)
-        : skipToken,
-      cacheTime: 0,
-      staleTime: 0,
-    }));
+    // const metaQuery = createQuery(() => ({
+    //   queryKey: ["editor", "meta"],
+    //   queryFn: editorInstance()
+    //     ? () => commands.getEditorMeta().then(transformMeta)
+    //     : skipToken,
+    //   cacheTime: 0,
+    //   staleTime: 0,
+    // }));
 
     return {
-      editorInstance,
-      latestFrame,
+      // editorInstance,
+      // latestFrame,
       presets: createPresets(),
-      metaQuery,
+      // metaQuery,
     };
   }, null!);
 

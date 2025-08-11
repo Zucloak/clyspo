@@ -1,7 +1,7 @@
 import { batch, createEffect, createSignal, onMount, Show } from "solid-js";
 import { createStore } from "solid-js/store";
-import { appLocalDataDir, join } from "@tauri-apps/api/path";
-import { exists } from "@tauri-apps/plugin-fs";
+// import { appLocalDataDir, join } from "@tauri-apps/api/path";
+// import { exists } from "@tauri-apps/plugin-fs";
 import toast from "solid-toast";
 import { Button } from "@cap/ui-solid";
 import { Select as KSelect } from "@kobalte/core/select";
@@ -15,7 +15,7 @@ import { Toggle } from "~/components/Toggle";
 import type { CaptionSettings, CaptionSegment } from "~/utils/tauri";
 import { Field, Slider, Subfield, Input } from "./ui";
 import { useEditorContext, FPS, OUTPUT_SIZE } from "./context";
-import { commands, events } from "~/utils/tauri";
+// import { commands, events } from "~/utils/tauri";
 
 // Model information
 interface ModelOption {
@@ -33,33 +33,33 @@ interface FontOption {
   label: string;
 }
 
-const MODEL_OPTIONS: ModelOption[] = [
-  { name: "tiny", label: "Tiny (75MB) - Fastest, less accurate" },
-  { name: "base", label: "Base (142MB) - Fast, decent accuracy" },
-  { name: "small", label: "Small (466MB) - Balanced speed/accuracy" },
-  { name: "medium", label: "Medium (1.5GB) - Slower, more accurate" },
-  { name: "large-v3", label: "Large (3GB) - Slowest, most accurate" },
-];
+// const MODEL_OPTIONS: ModelOption[] = [
+//   { name: "tiny", label: "Tiny (75MB) - Fastest, less accurate" },
+//   { name: "base", label: "Base (142MB) - Fast, decent accuracy" },
+//   { name: "small", label: "Small (466MB) - Balanced speed/accuracy" },
+//   { name: "medium", label: "Medium (1.5GB) - Slower, more accurate" },
+//   { name: "large-v3", label: "Large (3GB) - Slowest, most accurate" },
+// ];
 
-const LANGUAGE_OPTIONS: LanguageOption[] = [
-  { code: "auto", label: "Auto Detect" },
-  { code: "en", label: "English" },
-  { code: "es", label: "Spanish" },
-  { code: "fr", label: "French" },
-  { code: "de", label: "German" },
-  { code: "it", label: "Italian" },
-  { code: "pt", label: "Portuguese" },
-  { code: "nl", label: "Dutch" },
-  { code: "pl", label: "Polish" },
-  { code: "ru", label: "Russian" },
-  { code: "tr", label: "Turkish" },
-  { code: "ja", label: "Japanese" },
-  { code: "ko", label: "Korean" },
-  { code: "zh", label: "Chinese" },
-];
+// const LANGUAGE_OPTIONS: LanguageOption[] = [
+//   { code: "auto", label: "Auto Detect" },
+//   { code: "en", label: "English" },
+//   { code: "es", label: "Spanish" },
+//   { code: "fr", label: "French" },
+//   { code: "de", label: "German" },
+//   { code: "it", label: "Italian" },
+//   { code: "pt", label: "Portuguese" },
+//   { code: "nl", label: "Dutch" },
+//   { code: "pl", label: "Polish" },
+//   { code: "ru", label: "Russian" },
+//   { code: "tr", label: "Turkish" },
+//   { code: "ja", label: "Japanese" },
+//   { code: "ko", label: "Korean" },
+//   { code: "zh", label: "Chinese" },
+// ];
 
-const DEFAULT_MODEL = "tiny";
-const MODEL_FOLDER = "transcription_models";
+// const DEFAULT_MODEL = "tiny";
+// const MODEL_FOLDER = "transcription_models";
 
 // Custom flat button component since we can't import it
 function FlatButton(props: {
@@ -198,21 +198,21 @@ export function CaptionsTab() {
     const settings = captionSettings;
 
     // Only update if there are actual changes
-    if (
-      JSON.stringify(settings) !== JSON.stringify(project.captions.settings)
-    ) {
-      batch(() => {
-        // Update project settings
-        setProject("captions", "settings", settings);
+    // if (
+    //   JSON.stringify(settings) !== JSON.stringify(project.captions.settings)
+    // ) {
+    //   batch(() => {
+    //     // Update project settings
+    //     setProject("captions", "settings", settings);
 
-        // Force player refresh
-        events.renderFrameEvent.emit({
-          frame_number: Math.floor(editorState.playbackTime * FPS),
-          fps: FPS,
-          resolution_base: OUTPUT_SIZE,
-        });
-      });
-    }
+    //     // Force player refresh
+    //     // events.renderFrameEvent.emit({
+    //     //   frame_number: Math.floor(editorState.playbackTime * FPS),
+    //     //   fps: FPS,
+    //     //   resolution_base: OUTPUT_SIZE,
+    //     // });
+    //   });
+    // }
   });
 
   // Sync project settings to local store
@@ -238,13 +238,13 @@ export function CaptionsTab() {
     });
 
     // For font changes, force an immediate player update
-    if (key === "font") {
-      events.renderFrameEvent.emit({
-        frame_number: Math.floor(editorState.playbackTime * FPS),
-        fps: FPS,
-        resolution_base: OUTPUT_SIZE,
-      });
-    }
+    // if (key === "font") {
+    //   // events.renderFrameEvent.emit({
+    //   //   frame_number: Math.floor(editorState.playbackTime * FPS),
+    //   //   fps: FPS,
+    //   //   resolution_base: OUTPUT_SIZE,
+    //   // });
+    // }
   };
 
   // Restore scroll position after any content changes
@@ -261,20 +261,20 @@ export function CaptionsTab() {
   });
 
   // Add model selection state
-  const [selectedModel, setSelectedModel] = createSignal(DEFAULT_MODEL);
-  const [selectedLanguage, setSelectedLanguage] = createSignal("auto");
-  const [downloadedModels, setDownloadedModels] = createSignal<string[]>([]);
+  // const [selectedModel, setSelectedModel] = createSignal(DEFAULT_MODEL);
+  // const [selectedLanguage, setSelectedLanguage] = createSignal("auto");
+  // const [downloadedModels, setDownloadedModels] = createSignal<string[]>([]);
 
   // States for captions
-  const [modelExists, setModelExists] = createSignal(false);
-  const [isDownloading, setIsDownloading] = createSignal(false);
-  const [downloadProgress, setDownloadProgress] = createSignal(0);
-  const [downloadingModel, setDownloadingModel] = createSignal<string | null>(
-    null
-  );
-  const [isGenerating, setIsGenerating] = createSignal(false);
-  const [hasAudio, setHasAudio] = createSignal(false);
-  const [modelPath, setModelPath] = createSignal("");
+  // const [modelExists, setModelExists] = createSignal(false);
+  // const [isDownloading, setIsDownloading] = createSignal(false);
+  // const [downloadProgress, setDownloadProgress] = createSignal(0);
+  // const [downloadingModel, setDownloadingModel] = createSignal<string | null>(
+  //   null
+  // );
+  // const [isGenerating, setIsGenerating] = createSignal(false);
+  // const [hasAudio, setHasAudio] = createSignal(false);
+  // const [modelPath, setModelPath] = createSignal("");
   const [currentCaption, setCurrentCaption] = createSignal<string | null>(null);
 
   // Ensure captions object is initialized in project config
@@ -305,73 +305,67 @@ export function CaptionsTab() {
 
   // Check downloaded models on mount
   onMount(async () => {
-    try {
-      // Check for downloaded models
-      const appDataDirPath = await appLocalDataDir();
-      const modelsPath = await join(appDataDirPath, MODEL_FOLDER);
-
-      // Create models directory if it doesn't exist
-      if (!(await exists(modelsPath))) {
-        await commands.createDir(modelsPath, true);
-      }
-
-      // Check which models are already downloaded
-      const models = await Promise.all(
-        MODEL_OPTIONS.map(async (model) => {
-          const downloaded = await checkModelExists(model.name);
-          return { name: model.name, downloaded };
-        })
-      );
-
-      // Set available models
-      setDownloadedModels(
-        models.filter((m) => m.downloaded).map((m) => m.name)
-      );
-
-      // Check if current model exists
-      if (selectedModel()) {
-        setModelExists(await checkModelExists(selectedModel()));
-      }
-
-      // Check if the video has audio
-      if (editorInstance && editorInstance.recordings) {
-        const hasAudioTrack = editorInstance.recordings.segments.some(
-          (segment) => segment.mic !== null || segment.system_audio !== null
-        );
-        setHasAudio(hasAudioTrack);
-      }
-
-      // Restore download state if there was an ongoing download
-      const downloadState = localStorage.getItem("modelDownloadState");
-      if (downloadState) {
-        const { model, progress } = JSON.parse(downloadState);
-        if (model && progress < 100) {
-          setDownloadingModel(model);
-          setDownloadProgress(progress);
-          setIsDownloading(true);
-        } else {
-          localStorage.removeItem("modelDownloadState");
-        }
-      }
-    } catch (error) {
-      console.error("Error checking models:", error);
-    }
+    // try {
+    //   // Check for downloaded models
+    //   const appDataDirPath = await appLocalDataDir();
+    //   const modelsPath = await join(appDataDirPath, MODEL_FOLDER);
+    //   // Create models directory if it doesn't exist
+    //   if (!(await exists(modelsPath))) {
+    //     await commands.createDir(modelsPath, true);
+    //   }
+    //   // Check which models are already downloaded
+    //   const models = await Promise.all(
+    //     MODEL_OPTIONS.map(async (model) => {
+    //       const downloaded = await checkModelExists(model.name);
+    //       return { name: model.name, downloaded };
+    //     })
+    //   );
+    //   // Set available models
+    //   setDownloadedModels(
+    //     models.filter((m) => m.downloaded).map((m) => m.name)
+    //   );
+    //   // Check if current model exists
+    //   if (selectedModel()) {
+    //     setModelExists(await checkModelExists(selectedModel()));
+    //   }
+    //   // Check if the video has audio
+    //   if (editorInstance && editorInstance.recordings) {
+    //     const hasAudioTrack = editorInstance.recordings.segments.some(
+    //       (segment) => segment.mic !== null || segment.system_audio !== null
+    //     );
+    //     setHasAudio(hasAudioTrack);
+    //   }
+    //   // Restore download state if there was an ongoing download
+    //   const downloadState = localStorage.getItem("modelDownloadState");
+    //   if (downloadState) {
+    //     const { model, progress } = JSON.parse(downloadState);
+    //     if (model && progress < 100) {
+    //       setDownloadingModel(model);
+    //       setDownloadProgress(progress);
+    //       setIsDownloading(true);
+    //     } else {
+    //       localStorage.removeItem("modelDownloadState");
+    //     }
+    //   }
+    // } catch (error) {
+    //   console.error("Error checking models:", error);
+    // }
   });
 
   // Save download state when it changes
-  createEffect(() => {
-    if (isDownloading() && downloadingModel()) {
-      localStorage.setItem(
-        "modelDownloadState",
-        JSON.stringify({
-          model: downloadingModel(),
-          progress: downloadProgress(),
-        })
-      );
-    } else {
-      localStorage.removeItem("modelDownloadState");
-    }
-  });
+  // createEffect(() => {
+  //   if (isDownloading() && downloadingModel()) {
+  //     localStorage.setItem(
+  //       "modelDownloadState",
+  //       JSON.stringify({
+  //         model: downloadingModel(),
+  //         progress: downloadProgress(),
+  //       })
+  //     );
+  //   } else {
+  //     localStorage.removeItem("modelDownloadState");
+  //   }
+  // });
 
   // Effect to update current caption based on playback time
   createEffect(() => {
@@ -417,113 +411,101 @@ export function CaptionsTab() {
   });
 
   const checkModelExists = async (modelName: string) => {
-    const appDataDirPath = await appLocalDataDir();
-    const modelsPath = await join(appDataDirPath, MODEL_FOLDER);
-    const modelPath = await join(modelsPath, `${modelName}.bin`);
-    setModelPath(modelPath);
-    return await commands.checkModelExists(modelPath);
+    // const appDataDirPath = await appLocalDataDir();
+    // const modelsPath = await join(appDataDirPath, MODEL_FOLDER);
+    // const modelPath = await join(modelsPath, `${modelName}.bin`);
+    // setModelPath(modelPath);
+    // return await commands.checkModelExists(modelPath);
+    return false;
   };
 
   const downloadModel = async () => {
-    try {
-      const modelToDownload = selectedModel();
-      setIsDownloading(true);
-      setDownloadProgress(0);
-      setDownloadingModel(modelToDownload);
-
-      // Create the directory if it doesn't exist
-      const appDataDirPath = await appLocalDataDir();
-      const modelsPath = await join(appDataDirPath, MODEL_FOLDER);
-      const modelPath = await join(modelsPath, `${modelToDownload}.bin`);
-
-      try {
-        await commands.createDir(modelsPath, true);
-      } catch (err) {
-        console.error("Error creating directory:", err);
-      }
-
-      // Set up progress listener
-      const unlisten = await events.downloadProgress.listen((event) => {
-        setDownloadProgress(event.payload.progress);
-      });
-
-      // Download the model
-      await commands.downloadWhisperModel(modelToDownload, modelPath);
-
-      // Clean up listener
-      unlisten();
-
-      // Update downloaded models list
-      setDownloadedModels((prev) => [...prev, modelToDownload]);
-      setModelExists(true);
-      toast.success("Transcription model downloaded successfully!");
-    } catch (error) {
-      console.error("Error downloading model:", error);
-      toast.error("Failed to download transcription model");
-    } finally {
-      setIsDownloading(false);
-      setDownloadingModel(null);
-    }
+    // try {
+    //   const modelToDownload = selectedModel();
+    //   setIsDownloading(true);
+    //   setDownloadProgress(0);
+    //   setDownloadingModel(modelToDownload);
+    //   // Create the directory if it doesn't exist
+    //   const appDataDirPath = await appLocalDataDir();
+    //   const modelsPath = await join(appDataDirPath, MODEL_FOLDER);
+    //   const modelPath = await join(modelsPath, `${modelToDownload}.bin`);
+    //   try {
+    //     await commands.createDir(modelsPath, true);
+    //   } catch (err) {
+    //     console.error("Error creating directory:", err);
+    //   }
+    //   // Set up progress listener
+    //   const unlisten = await events.downloadProgress.listen((event) => {
+    //     setDownloadProgress(event.payload.progress);
+    //   });
+    //   // Download the model
+    //   await commands.downloadWhisperModel(modelToDownload, modelPath);
+    //   // Clean up listener
+    //   unlisten();
+    //   // Update downloaded models list
+    //   setDownloadedModels((prev) => [...prev, modelToDownload]);
+    //   setModelExists(true);
+    //   toast.success("Transcription model downloaded successfully!");
+    // } catch (error) {
+    //   console.error("Error downloading model:", error);
+    //   toast.error("Failed to download transcription model");
+    // } finally {
+    //   setIsDownloading(false);
+    //   setDownloadingModel(null);
+    // }
   };
 
   const generateCaptions = async () => {
-    if (!editorInstance) {
-      toast.error("Editor instance not found");
-      return;
-    }
-
-    setIsGenerating(true);
-
-    try {
-      const videoPath = editorInstance.path;
-      const lang = selectedLanguage();
-      const currentModelPath = await join(
-        await appLocalDataDir(),
-        MODEL_FOLDER,
-        `${selectedModel()}.bin`
-      );
-
-      // Verify file existence before proceeding
-      const result = await commands.transcribeAudio(
-        videoPath,
-        currentModelPath,
-        lang
-      );
-
-      if (result && result.segments.length > 0) {
-        // Update project with the new segments
-        setProject("captions", "segments", result.segments);
-        updateCaptionSetting("enabled", true);
-        toast.success("Captions generated successfully!");
-      } else {
-        toast.error(
-          "No captions were generated. The audio might be too quiet or unclear."
-        );
-      }
-    } catch (error) {
-      console.error("Error generating captions:", error);
-      let errorMessage = "Unknown error occurred";
-
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      } else if (typeof error === "string") {
-        errorMessage = error;
-      }
-
-      // Provide more user-friendly error messages
-      if (errorMessage.includes("No audio stream found")) {
-        errorMessage = "No audio found in the video file";
-      } else if (errorMessage.includes("Model file not found")) {
-        errorMessage = "Caption model not found. Please download it first";
-      } else if (errorMessage.includes("Failed to load Whisper model")) {
-        errorMessage =
-          "Failed to load the caption model. Try downloading it again";
-      }
-
-      toast.error("Failed to generate captions: " + errorMessage);
-    } finally {
-      setIsGenerating(false);
-    }
+    // if (!editorInstance) {
+    //   toast.error("Editor instance not found");
+    //   return;
+    // }
+    // setIsGenerating(true);
+    // try {
+    //   const videoPath = editorInstance.path;
+    //   const lang = selectedLanguage();
+    //   const currentModelPath = await join(
+    //     await appLocalDataDir(),
+    //     MODEL_FOLDER,
+    //     `${selectedModel()}.bin`
+    //   );
+    //   // Verify file existence before proceeding
+    //   const result = await commands.transcribeAudio(
+    //     videoPath,
+    //     currentModelPath,
+    //     lang
+    //   );
+    //   if (result && result.segments.length > 0) {
+    //     // Update project with the new segments
+    //     setProject("captions", "segments", result.segments);
+    //     updateCaptionSetting("enabled", true);
+    //     toast.success("Captions generated successfully!");
+    //   } else {
+    //     toast.error(
+    //       "No captions were generated. The audio might be too quiet or unclear."
+    //     );
+    //   }
+    // } catch (error) {
+    //   console.error("Error generating captions:", error);
+    //   let errorMessage = "Unknown error occurred";
+    //   if (error instanceof Error) {
+    //     errorMessage = error.message;
+    //   } else if (typeof error === "string") {
+    //     errorMessage = error;
+    //   }
+    //   // Provide more user-friendly error messages
+    //   if (errorMessage.includes("No audio stream found")) {
+    //     errorMessage = "No audio found in the video file";
+    //   } else if (errorMessage.includes("Model file not found")) {
+    //     errorMessage = "Caption model not found. Please download it first";
+    //   } else if (errorMessage.includes("Failed to load Whisper model")) {
+    //     errorMessage =
+    //       "Failed to load the caption model. Try downloading it again";
+    //   }
+    //   toast.error("Failed to generate captions: " + errorMessage);
+    // } finally {
+    //   setIsGenerating(false);
+    // }
   };
 
   // Segment operations that update project directly
@@ -595,228 +577,9 @@ export function CaptionsTab() {
 
             <Show when={captionSettings.enabled}>
               <div class="space-y-6 transition-all duration-200">
-                {/* Model Selection and Download Section */}
-                <div class="space-y-4">
-                  <div class="space-y-2">
-                    <label class="text-xs text-gray-500">Current Model</label>
-                    <KSelect<string>
-                      options={MODEL_OPTIONS.filter((m) =>
-                        downloadedModels().includes(m.name)
-                      ).map((m) => m.name)}
-                      value={selectedModel()}
-                      onChange={(value: string | null) => {
-                        if (value) {
-                          batch(() => {
-                            setSelectedModel(value);
-                            setModelExists(downloadedModels().includes(value));
-                          });
-                        }
-                      }}
-                      itemComponent={(props) => (
-                        <MenuItem<typeof KSelect.Item>
-                          as={KSelect.Item}
-                          item={props.item}
-                        >
-                          <KSelect.ItemLabel class="flex-1">
-                            {
-                              MODEL_OPTIONS.find(
-                                (m) => m.name === props.item.rawValue
-                              )?.label
-                            }
-                          </KSelect.ItemLabel>
-                        </MenuItem>
-                      )}
-                    >
-                      <KSelect.Trigger class="flex flex-row items-center h-9 px-3 gap-2 border rounded-lg border-gray-200 w-full text-gray-700 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors">
-                        <KSelect.Value<string> class="flex-1 text-left truncate">
-                          {(state) => {
-                            const model = MODEL_OPTIONS.find(
-                              (m) => m.name === state.selectedOption()
-                            );
-                            return (
-                              <span>{model?.label || "Select a model"}</span>
-                            );
-                          }}
-                        </KSelect.Value>
-                        <KSelect.Icon>
-                          <IconCapChevronDown class="size-4 shrink-0 transform transition-transform ui-expanded:rotate-180" />
-                        </KSelect.Icon>
-                      </KSelect.Trigger>
-                      <KSelect.Portal>
-                        <PopperContent<typeof KSelect.Content>
-                          as={KSelect.Content}
-                          class={topLeftAnimateClasses}
-                        >
-                          <MenuItemList<typeof KSelect.Listbox>
-                            class="max-h-48 overflow-y-auto"
-                            as={KSelect.Listbox}
-                          />
-                        </PopperContent>
-                      </KSelect.Portal>
-                    </KSelect>
-                  </div>
-
-                  <div class="space-y-2">
-                    <label class="text-xs text-gray-500">
-                      Download New Model
-                    </label>
-                    <KSelect<string>
-                      options={MODEL_OPTIONS.map((m) => m.name)}
-                      value={selectedModel()}
-                      onChange={(value: string | null) => {
-                        if (value) setSelectedModel(value);
-                      }}
-                      disabled={isDownloading()}
-                      itemComponent={(props) => (
-                        <MenuItem<typeof KSelect.Item>
-                          as={KSelect.Item}
-                          item={props.item}
-                        >
-                          <KSelect.ItemLabel class="flex-1">
-                            {
-                              MODEL_OPTIONS.find(
-                                (m) => m.name === props.item.rawValue
-                              )?.label
-                            }
-                            {downloadedModels().includes(props.item.rawValue)
-                              ? " (Downloaded)"
-                              : ""}
-                          </KSelect.ItemLabel>
-                        </MenuItem>
-                      )}
-                    >
-                      <KSelect.Trigger class="flex flex-row items-center h-9 px-3 gap-2 border rounded-lg border-gray-200 w-full text-gray-700 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors">
-                        <KSelect.Value<string> class="flex-1 text-left truncate">
-                          {(state) => {
-                            const model = MODEL_OPTIONS.find(
-                              (m) => m.name === state.selectedOption()
-                            );
-                            return (
-                              <span>{model?.label || "Select a model"}</span>
-                            );
-                          }}
-                        </KSelect.Value>
-                        <KSelect.Icon>
-                          <IconCapChevronDown class="size-4 shrink-0 transform transition-transform ui-expanded:rotate-180" />
-                        </KSelect.Icon>
-                      </KSelect.Trigger>
-                      <KSelect.Portal>
-                        <PopperContent<typeof KSelect.Content>
-                          as={KSelect.Content}
-                          class={topLeftAnimateClasses}
-                        >
-                          <MenuItemList<typeof KSelect.Listbox>
-                            class="max-h-48 overflow-y-auto"
-                            as={KSelect.Listbox}
-                          />
-                        </PopperContent>
-                      </KSelect.Portal>
-                    </KSelect>
-                  </div>
-
-                  <Show
-                    when={isDownloading()}
-                    fallback={
-                      <Button
-                        class="w-full"
-                        onClick={downloadModel}
-                        disabled={
-                          isDownloading() ||
-                          downloadedModels().includes(selectedModel())
-                        }
-                      >
-                        Download{" "}
-                        {
-                          MODEL_OPTIONS.find((m) => m.name === selectedModel())
-                            ?.label
-                        }
-                      </Button>
-                    }
-                  >
-                    <div class="space-y-2">
-                      <div class="w-full bg-gray-100 rounded-full h-2">
-                        <div
-                          class="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                          style={{ width: `${downloadProgress()}%` }}
-                        />
-                      </div>
-                      <p class="text-xs text-center text-gray-500">
-                        Downloading{" "}
-                        {
-                          MODEL_OPTIONS.find(
-                            (m) => m.name === downloadingModel()
-                          )?.label
-                        }
-                        : {Math.round(downloadProgress())}%
-                      </p>
-                    </div>
-                  </Show>
-                </div>
-
-                {/* Language Selection */}
-                <Subfield name="Language">
-                  <KSelect<string>
-                    options={LANGUAGE_OPTIONS.map((l) => l.code)}
-                    value={selectedLanguage()}
-                    onChange={(value: string | null) => {
-                      if (value) setSelectedLanguage(value);
-                    }}
-                    itemComponent={(props) => (
-                      <MenuItem<typeof KSelect.Item>
-                        as={KSelect.Item}
-                        item={props.item}
-                      >
-                        <KSelect.ItemLabel class="flex-1">
-                          {
-                            LANGUAGE_OPTIONS.find(
-                              (l) => l.code === props.item.rawValue
-                            )?.label
-                          }
-                        </KSelect.ItemLabel>
-                      </MenuItem>
-                    )}
-                  >
-                    <KSelect.Trigger class="flex flex-row items-center h-9 px-3 gap-2 border rounded-lg border-gray-200 w-full text-gray-700 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors">
-                      <KSelect.Value<string> class="flex-1 text-left truncate">
-                        {(state) => {
-                          const language = LANGUAGE_OPTIONS.find(
-                            (l) => l.code === state.selectedOption()
-                          );
-                          return (
-                            <span>
-                              {language?.label || "Select a language"}
-                            </span>
-                          );
-                        }}
-                      </KSelect.Value>
-                      <KSelect.Icon>
-                        <IconCapChevronDown class="size-4 shrink-0 transform transition-transform ui-expanded:rotate-180" />
-                      </KSelect.Icon>
-                    </KSelect.Trigger>
-                    <KSelect.Portal>
-                      <PopperContent<typeof KSelect.Content>
-                        as={KSelect.Content}
-                        class={topLeftAnimateClasses}
-                      >
-                        <MenuItemList<typeof KSelect.Listbox>
-                          class="max-h-48 overflow-y-auto"
-                          as={KSelect.Listbox}
-                        />
-                      </PopperContent>
-                    </KSelect.Portal>
-                  </KSelect>
-                </Subfield>
-
-                {/* Generate Captions Button */}
-                <Show when={hasAudio()}>
-                  <Button
-                    onClick={generateCaptions}
-                    disabled={isGenerating()}
-                    class="w-full"
-                  >
-                    {isGenerating() ? "Generating..." : "Generate Captions"}
-                  </Button>
-                </Show>
+                {/* --- Automatic Caption Generation Removed --- */}
+                {/* The following UI for downloading models and generating captions has been removed */}
+                {/* as it relies on a native desktop backend which is not available in the web version. */}
 
                 {/* Font Settings */}
                 <Field name="Font Settings" icon={<IconCapMessageBubble />}>

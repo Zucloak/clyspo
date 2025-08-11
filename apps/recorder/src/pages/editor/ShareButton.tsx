@@ -4,10 +4,10 @@ import { createMutation } from "@tanstack/solid-query";
 import { createSignal, Show } from "solid-js";
 import { createStore, produce, reconcile } from "solid-js/store";
 import Tooltip from "~/components/Tooltip";
-import { createProgressBar } from "~/routes/editor/utils";
+// import { createProgressBar } from "~/routes/editor/utils";
 import { authStore } from "~/store";
 import { exportVideo } from "~/utils/export";
-import { commands, events } from "~/utils/tauri";
+// import { commands, events } from "~/utils/tauri";
 import { useEditorContext } from "./context";
 import { RESOLUTION_OPTIONS } from "./Header";
 import {
@@ -25,99 +25,84 @@ function ShareButton() {
 
   const upload = createMutation(() => ({
     mutationFn: async () => {
-      setUploadState({ type: "idle" });
-
-      console.log("Starting upload process...");
-
-      // Check authentication first
-      const existingAuth = await authStore.get();
-      if (!existingAuth) {
-        throw new Error("You need to sign in to share recordings");
-      }
-
-      const metadata = await commands.getVideoMetadata(projectPath);
-      const plan = await commands.checkUpgradedAndUpdate();
-      const canShare = {
-        allowed: plan || metadata.duration < 300,
-        reason: !plan && metadata.duration >= 300 ? "upgrade_required" : null,
-      };
-
-      if (!canShare.allowed) {
-        if (canShare.reason === "upgrade_required") {
-          await commands.showWindow("Upgrade");
-          throw new Error(
-            "Upgrade required to share recordings longer than 5 minutes"
-          );
-        }
-      }
-
-      const unlisten = await events.uploadProgress.listen((event) => {
-        console.log("Upload progress event:", event.payload);
-        setUploadState(
-          produce((state) => {
-            if (state.type !== "uploading") return;
-
-            state.progress = Math.round(event.payload.progress * 100);
-          })
-        );
-      });
-
-      try {
-        setUploadState({ type: "starting" });
-
-        // Setup progress listener before starting upload
-
-        console.log("Starting actual upload...");
-
-        await exportVideo(
-          projectPath,
-          {
-            format: "Mp4",
-            fps: 30,
-            resolution_base: {
-              x: RESOLUTION_OPTIONS._1080p.width,
-              y: RESOLUTION_OPTIONS._1080p.height,
-            },
-            compression: "Web",
-          },
-          (msg) => {
-            setUploadState(
-              reconcile({
-                type: "rendering",
-                renderedFrames: msg.renderedCount,
-                totalFrames: msg.totalFrames,
-              })
-            );
-          }
-        );
-
-        setUploadState({ type: "uploading", progress: 0 });
-
-        // Now proceed with upload
-        const result = meta().sharing
-          ? await commands.uploadExportedVideo(projectPath, "Reupload")
-          : await commands.uploadExportedVideo(projectPath, {
-            Initial: { pre_created_video: null },
-          });
-
-        if (result === "NotAuthenticated") {
-          throw new Error("You need to sign in to share recordings");
-        } else if (result === "PlanCheckFailed")
-          throw new Error("Failed to verify your subscription status");
-        else if (result === "UpgradeRequired")
-          throw new Error("This feature requires an upgraded plan");
-
-        setUploadState({ type: "link-copied" });
-
-        return result;
-      } finally {
-        unlisten();
-      }
+      // setUploadState({ type: "idle" });
+      // console.log("Starting upload process...");
+      // // Check authentication first
+      // const existingAuth = await authStore.get();
+      // if (!existingAuth) {
+      //   throw new Error("You need to sign in to share recordings");
+      // }
+      // const metadata = await commands.getVideoMetadata(projectPath);
+      // const plan = await commands.checkUpgradedAndUpdate();
+      // const canShare = {
+      //   allowed: plan || metadata.duration < 300,
+      //   reason: !plan && metadata.duration >= 300 ? "upgrade_required" : null,
+      // };
+      // if (!canShare.allowed) {
+      //   if (canShare.reason === "upgrade_required") {
+      //     await commands.showWindow("Upgrade");
+      //     throw new Error(
+      //       "Upgrade required to share recordings longer than 5 minutes"
+      //     );
+      //   }
+      // }
+      // const unlisten = await events.uploadProgress.listen((event) => {
+      //   console.log("Upload progress event:", event.payload);
+      //   setUploadState(
+      //     produce((state) => {
+      //       if (state.type !== "uploading") return;
+      //       state.progress = Math.round(event.payload.progress * 100);
+      //     })
+      //   );
+      // });
+      // try {
+      //   setUploadState({ type: "starting" });
+      //   // Setup progress listener before starting upload
+      //   console.log("Starting actual upload...");
+      //   await exportVideo(
+      //     projectPath,
+      //     {
+      //       format: "Mp4",
+      //       fps: 30,
+      //       resolution_base: {
+      //         x: RESOLUTION_OPTIONS._1080p.width,
+      //         y: RESOLUTION_OPTIONS._1080p.height,
+      //       },
+      //       compression: "Web",
+      //     },
+      //     (msg) => {
+      //       setUploadState(
+      //         reconcile({
+      //           type: "rendering",
+      //           renderedFrames: msg.renderedCount,
+      //           totalFrames: msg.totalFrames,
+      //         })
+      //       );
+      //     }
+      //   );
+      //   setUploadState({ type: "uploading", progress: 0 });
+      //   // Now proceed with upload
+      //   const result = meta().sharing
+      //     ? await commands.uploadExportedVideo(projectPath, "Reupload")
+      //     : await commands.uploadExportedVideo(projectPath, {
+      //       Initial: { pre_created_video: null },
+      //     });
+      //   if (result === "NotAuthenticated") {
+      //     throw new Error("You need to sign in to share recordings");
+      //   } else if (result === "PlanCheckFailed")
+      //     throw new Error("Failed to verify your subscription status");
+      //   else if (result === "UpgradeRequired")
+      //     throw new Error("This feature requires an upgraded plan");
+      //   setUploadState({ type: "link-copied" });
+      //   return result;
+      // } finally {
+      //   unlisten();
+      // }
     },
     onError: (error) => {
-      commands.globalMessageDialog(
-        error instanceof Error ? error.message : "Failed to upload recording"
-      );
+      // commands.globalMessageDialog(
+      //   error instanceof Error ? error.message : "Failed to upload recording"
+      // );
     },
     onSettled() {
       setTimeout(() => {
@@ -135,12 +120,12 @@ function ShareButton() {
     | { type: "link-copied" }
   >({ type: "idle" });
 
-  createProgressBar(() => {
-    if (uploadState.type === "starting") return 0;
-    if (uploadState.type === "rendering")
-      return (uploadState.renderedFrames / uploadState.totalFrames) * 100;
-    if (uploadState.type === "uploading") return uploadState.progress;
-  });
+  // createProgressBar(() => {
+  //   if (uploadState.type === "starting") return 0;
+  //   if (uploadState.type === "rendering")
+  //     return (uploadState.renderedFrames / uploadState.totalFrames) * 100;
+  //   if (uploadState.type === "uploading") return uploadState.progress;
+  // });
 
   return (
     <div class="relative">

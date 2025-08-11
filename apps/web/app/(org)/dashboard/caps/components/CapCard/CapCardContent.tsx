@@ -1,5 +1,5 @@
-import { editDate } from "@/actions/videos/edit-date";
-import { editTitle } from "@/actions/videos/edit-title";
+// import { editDate } from "@/actions/videos/edit-date";
+// import { editTitle } from "@/actions/videos/edit-title";
 import { Tooltip } from "@/components/Tooltip";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -44,23 +44,22 @@ export const CapCardContent: React.FC<CapContentProps> = ({
 
 
   const handleTitleBlur = async (capName: string) => {
-    if (!title || capName === title) {
-      setIsEditing(false);
-      return;
-    }
-
-    try {
-      await editTitle(cap.id, title);
-      toast.success("Video title updated");
-      setIsEditing(false);
-      router.refresh();
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("Failed to update title - please try again.");
-      }
-    }
+    // if (!title || capName === title) {
+    //   setIsEditing(false);
+    //   return;
+    // }
+    // try {
+    //   await editTitle(cap.id, title);
+    //   toast.success("Video title updated");
+    //   setIsEditing(false);
+    //   router.refresh();
+    // } catch (error) {
+    //   if (error instanceof Error) {
+    //     toast.error(error.message);
+    //   } else {
+    //     toast.error("Failed to update title - please try again.");
+    //   }
+    // }
   };
 
 
@@ -89,42 +88,37 @@ export const CapCardContent: React.FC<CapContentProps> = ({
   };
 
   const handleDateBlur = async () => {
-    const isValidDate = moment(dateValue).isValid();
-
-    if (!isValidDate) {
-      toast.error("Invalid date format. Please use YYYY-MM-DD HH:mm:ss");
-      setDateValue(moment(effectiveDate).format("YYYY-MM-DD HH:mm:ss"));
-      setIsDateEditing(false);
-      return;
-    }
-
-    const selectedDate = moment(dateValue);
-    const currentDate = moment();
-
-    if (selectedDate.isAfter(currentDate)) {
-      toast.error("Cannot set a date in the future");
-      setDateValue(moment(effectiveDate).format("YYYY-MM-DD HH:mm:ss"));
-      setIsDateEditing(false);
-      return;
-    }
-
-    if (selectedDate.isSame(effectiveDate)) {
-      setIsDateEditing(false);
-      return;
-    }
-
-    try {
-      await editDate(cap.id, selectedDate.toISOString());
-      toast.success("Video date updated");
-      setIsDateEditing(false);
-      router.refresh();
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("Failed to update date - please try again.");
-      }
-    }
+    // const isValidDate = moment(dateValue).isValid();
+    // if (!isValidDate) {
+    //   toast.error("Invalid date format. Please use YYYY-MM-DD HH:mm:ss");
+    //   setDateValue(moment(effectiveDate).format("YYYY-MM-DD HH:mm:ss"));
+    //   setIsDateEditing(false);
+    //   return;
+    // }
+    // const selectedDate = moment(dateValue);
+    // const currentDate = moment();
+    // if (selectedDate.isAfter(currentDate)) {
+    //   toast.error("Cannot set a date in the future");
+    //   setDateValue(moment(effectiveDate).format("YYYY-MM-DD HH:mm:ss"));
+    //   setIsDateEditing(false);
+    //   return;
+    // }
+    // if (selectedDate.isSame(effectiveDate)) {
+    //   setIsDateEditing(false);
+    //   return;
+    // }
+    // try {
+    //   await editDate(cap.id, selectedDate.toISOString());
+    //   toast.success("Video date updated");
+    //   setIsDateEditing(false);
+    //   router.refresh();
+    // } catch (error) {
+    //   if (error instanceof Error) {
+    //     toast.error(error.message);
+    //   } else {
+    //     toast.error("Failed to update date - please try again.");
+    //   }
+    // }
   };
 
   const handleDateKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

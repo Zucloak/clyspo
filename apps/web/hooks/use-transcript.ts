@@ -1,21 +1,22 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getTranscript } from "@/actions/videos/get-transcript";
+// import { getTranscript } from "@/actions/videos/get-transcript";
 
 export const useTranscript = (videoId: string, transcriptionStatus?: string | null) => {
   return useQuery({
     queryKey: ["transcript", videoId],
     queryFn: async () => {
-      const result = await getTranscript(videoId);
+      // const result = await getTranscript(videoId);
       
-      if (result.success && result.content) {
-        return result.content;
-      } else {
-        console.error("[useTranscript] Failed to fetch transcript:", result.message);
-        if (result.message === "Transcript is not ready yet") {
-          throw new Error("TRANSCRIPT_NOT_READY");
-        }
-        throw new Error(result.message);
-      }
+      // if (result.success && result.content) {
+      //   return result.content;
+      // } else {
+      //   console.error("[useTranscript] Failed to fetch transcript:", result.message);
+      //   if (result.message === "Transcript is not ready yet") {
+      //     throw new Error("TRANSCRIPT_NOT_READY");
+      //   }
+      //   throw new Error(result.message);
+      // }
+      return null;
     },
     enabled: transcriptionStatus === "COMPLETE",
     staleTime: 0,

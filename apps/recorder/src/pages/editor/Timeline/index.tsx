@@ -1,6 +1,6 @@
 import { createElementBounds } from "@solid-primitives/bounds";
 import { createEventListener } from "@solid-primitives/event-listener";
-import { platform } from "@tauri-apps/plugin-os";
+// import { platform } from "@tauri-apps/plugin-os";
 import { cx } from "cva";
 import { For, Show, batch, createRoot, createSignal, onMount } from "solid-js";
 import { produce } from "solid-js/store";
@@ -167,9 +167,7 @@ export function Timeline() {
               delta = e.deltaX;
             }
             // Otherwise use platform-specific defaults
-            else if (platform() === "macos") {
-              delta = e.shiftKey ? e.deltaX : e.deltaY;
-            } else {
+            else {
               delta = e.deltaY;
             }
 

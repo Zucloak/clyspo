@@ -12,16 +12,16 @@ export function formatTime(secs: number, fps?: number) {
   return str;
 }
 
-import { getCurrentWindow, ProgressBarStatus } from "@tauri-apps/api/window";
-import { createEffect } from "solid-js";
+// import { getCurrentWindow, ProgressBarStatus } from "@tauri-apps/api/window";
+// import { createEffect } from "solid-js";
 
-export function createProgressBar(progress: () => number | undefined) {
-  const currentWindow = getCurrentWindow();
+// export function createProgressBar(progress: () => number | undefined) {
+//   const currentWindow = getCurrentWindow();
 
-  createEffect(() => {
-    const p = progress();
-    if (p === undefined)
-      currentWindow.setProgressBar({ status: ProgressBarStatus.None });
-    else currentWindow.setProgressBar({ progress: Math.round(p) });
-  });
-}
+//   createEffect(() => {
+//     const p = progress();
+//     if (p === undefined)
+//       currentWindow.setProgressBar({ status: ProgressBarStatus.None });
+//     else currentWindow.setProgressBar({ progress: Math.round(p) });
+//   });
+// }

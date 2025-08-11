@@ -8,7 +8,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { PropsWithChildren } from "react";
 import { getBootstrapData } from "@/utils/getBootstrapData";
-import { Analytics as DubAnalytics } from "@dub/analytics/react";
+// import { Analytics as DubAnalytics } from "@dub/analytics/react";
 
 import {
   SessionProvider,
@@ -18,9 +18,9 @@ import {
 
 //@ts-expect-error
 import { script } from "./themeScript";
-import { getCurrentUser } from "@cap/database/auth/session";
+// import { getCurrentUser } from "@cap/database/auth/session";
 import { AuthContextProvider } from "./Layout/AuthContext";
-import { PosthogIdentify } from "./Layout/PosthogIdentify";
+// import { PosthogIdentify } from "./Layout/PosthogIdentify";
 
 const defaultFont = localFont({
   src: [
@@ -71,11 +71,15 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = "force-dynamic";
-
 export default async function RootLayout({ children }: PropsWithChildren) {
   const bootstrapData = await getBootstrapData();
-  const userPromise = getCurrentUser();
+  // const userPromise = getCurrentUser();
+  const userPromise = Promise.resolve({
+    id: "1",
+    name: "Local User",
+    email: "user@localhost",
+  } as any);
+
 
   return (
     <html className={defaultFont.className} lang="en">
@@ -108,9 +112,9 @@ export default async function RootLayout({ children }: PropsWithChildren) {
           dangerouslySetInnerHTML={{ __html: `(${script.toString()})()` }}
         />
         <TooltipPrimitive.Provider>
-          <PostHogProvider bootstrapData={bootstrapData}>
+          {/* <PostHogProvider bootstrapData={bootstrapData}> */}
             <AuthContextProvider user={userPromise}>
-              <SessionProvider>
+              {/* <SessionProvider> */}
                 <PublicEnvContext
                   value={{
                     webUrl: buildEnv.NEXT_PUBLIC_WEB_URL,
@@ -121,20 +125,20 @@ export default async function RootLayout({ children }: PropsWithChildren) {
                   <ReactQueryProvider>
                     <SonnerToaster />
                     <main className="w-full">{children}</main>
-                    <PosthogIdentify />
+                    {/* <PosthogIdentify /> */}
                   </ReactQueryProvider>
                 </PublicEnvContext>
-              </SessionProvider>
+              {/* </SessionProvider> */}
             </AuthContextProvider>
-          </PostHogProvider>
+          {/* </PostHogProvider> */}
         </TooltipPrimitive.Provider>
-        {buildEnv.NEXT_PUBLIC_IS_CAP && (
+        {/* {buildEnv.NEXT_PUBLIC_IS_CAP && (
           <DubAnalytics
             domainsConfig={{
               refer: "go.cap.so",
             }}
           />
-        )}
+        )} */}
       </body>
     </html>
   );

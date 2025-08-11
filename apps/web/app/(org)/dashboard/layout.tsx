@@ -1,6 +1,6 @@
-import { getCurrentUser } from "@cap/database/auth/session";
+// import { getCurrentUser } from "@cap/database/auth/session";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 
 import { getDashboardData, Organization, Spaces, UserPreferences } from "./dashboard-data";
 import DashboardInner from "./_components/DashboardInner";
@@ -9,22 +9,30 @@ import DesktopNav from "./_components/Navbar/Desktop";
 import MobileNav from "./_components/Navbar/Mobile";
 import { UploadingProvider } from "./caps/UploadingContext";
 
-export const dynamic = "force-dynamic";
-
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getCurrentUser();
+  // const user = await getCurrentUser();
+  const user = {
+    id: "1",
+    name: "Local User",
+    email: "user@localhost",
+    activeOrganizationId: "1",
+    stripeSubscriptionId: null,
+    stripeSubscriptionStatus: null,
+    thirdPartyStripeSubscriptionId: null,
+  } as any;
 
-  if (!user || !user.id) {
-    redirect("/login");
-  }
 
-  if (!user.name || user.name.length <= 1) {
-    redirect("/onboarding");
-  }
+  // if (!user || !user.id) {
+  //   redirect("/login");
+  // }
+
+  // if (!user.name || user.name.length <= 1) {
+  //   redirect("/onboarding");
+  // }
 
   let organizationSelect: Organization[] = [];
   let spacesData: Spaces[] = [];

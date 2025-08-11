@@ -1,8 +1,8 @@
 import { createTimer } from "@solid-primitives/timer";
 import { createMutation } from "@tanstack/solid-query";
-import { getCurrentWindow } from "@tauri-apps/api/window";
-import * as dialog from "@tauri-apps/plugin-dialog";
-import { type as ostype } from "@tauri-apps/plugin-os";
+// import { getCurrentWindow } from "@tauri-apps/api/window";
+// import * as dialog from "@tauri-apps/plugin-dialog";
+// import { type as ostype } from "@tauri-apps/plugin-os";
 import { cx } from "cva";
 import {
   createEffect,
@@ -15,12 +15,12 @@ import { createStore, produce } from "solid-js/store";
 import createPresence from "solid-presence";
 
 import {
-  createCurrentRecordingQuery,
+  // createCurrentRecordingQuery,
   createOptionsQuery,
 } from "~/utils/queries";
-import { commands, events } from "~/utils/tauri";
+// import { commands, events } from "~/utils/tauri";
 import { createMemo } from "solid-js";
-import { createTauriEventListener } from "~/utils/createEventListener";
+// import { createTauriEventListener } from "~/utils/createEventListener";
 
 type State =
   | { variant: "countdown"; from: number; current: number }
@@ -46,7 +46,7 @@ export default function () {
   );
   const [start, setStart] = createSignal(Date.now());
   const [time, setTime] = createSignal(Date.now());
-  const currentRecording = createCurrentRecordingQuery();
+  // const currentRecording = createCurrentRecordingQuery();
   const optionsQuery = createOptionsQuery();
 
   const audioLevel = createAudioInputLevel();
@@ -59,18 +59,18 @@ export default function () {
       ]
   >([]);
 
-  createTauriEventListener(events.recordingEvent, (payload) => {
-    if (payload.variant === "Countdown") {
-      setState((s) => {
-        if (s.variant === "countdown") return { ...s, current: payload.value };
+  // createTauriEventListener(events.recordingEvent, (payload) => {
+  //   if (payload.variant === "Countdown") {
+  //     setState((s) => {
+  //       if (s.variant === "countdown") return { ...s, current: payload.value };
 
-        return s;
-      });
-    } else if (payload.variant === "Started") {
-      setState({ variant: "recording" });
-      setStart(Date.now());
-    }
-  });
+  //       return s;
+  //     });
+  //   } else if (payload.variant === "Started") {
+  //     setState({ variant: "recording" });
+  //     setStart(Date.now());
+  //   }
+  // });
 
   createTimer(
     () => {
@@ -81,70 +81,70 @@ export default function () {
     setInterval
   );
 
-  createEffect(() => {
-    if (
-      state().variant === "stopped" &&
-      !currentRecording.isPending &&
-      (currentRecording.data === undefined || currentRecording.data === null)
-    )
-      getCurrentWindow().close();
-  });
+  // createEffect(() => {
+  //   if (
+  //     state().variant === "stopped" &&
+  //     !currentRecording.isPending &&
+  //     (currentRecording.data === undefined || currentRecording.data === null)
+  //   )
+  //     getCurrentWindow().close();
+  // });
 
   const stopRecording = createMutation(() => ({
     mutationFn: async () => {
       setState({ variant: "stopped" });
-      await commands.stopRecording();
+      // await commands.stopRecording();
     },
   }));
 
   const togglePause = createMutation(() => ({
     mutationFn: async () => {
-      if (state().variant === "paused") {
-        await commands.resumeRecording();
-        setPauseResumes(
-          produce((a) => {
-            if (a.length === 0) return a;
-            a[a.length - 1].resume = Date.now();
-          })
-        );
-        setState({ variant: "recording" });
-      } else {
-        await commands.pauseRecording();
-        setPauseResumes((a) => [...a, { pause: Date.now() }]);
-        setState({ variant: "paused" });
-      }
-      setTime(Date.now());
+      // if (state().variant === "paused") {
+      //   await commands.resumeRecording();
+      //   setPauseResumes(
+      //     produce((a) => {
+      //       if (a.length === 0) return a;
+      //       a[a.length - 1].resume = Date.now();
+      //     })
+      //   );
+      //   setState({ variant: "recording" });
+      // } else {
+      //   await commands.pauseRecording();
+      //   setPauseResumes((a) => [...a, { pause: Date.now() }]);
+      //   setState({ variant: "paused" });
+      // }
+      // setTime(Date.now());
     },
   }));
 
   const restartRecording = createMutation(() => ({
     mutationFn: async () => {
-      const shouldRestart = await dialog.confirm(
-        "Are you sure you want to restart the recording? The current recording will be discarded.",
-        { title: "Confirm Restart", okLabel: "Restart", cancelLabel: "Cancel" }
-      );
+      // const shouldRestart = await dialog.confirm(
+      //   "Are you sure you want to restart the recording? The current recording will be discarded.",
+      //   { title: "Confirm Restart", okLabel: "Restart", cancelLabel: "Cancel" }
+      // );
 
-      if (!shouldRestart) return;
+      // if (!shouldRestart) return;
 
-      await commands.restartRecording();
+      // await commands.restartRecording();
 
-      setState({ variant: "recording" });
-      setTime(Date.now());
+      // setState({ variant: "recording" });
+      // setTime(Date.now());
     },
   }));
 
   const deleteRecording = createMutation(() => ({
     mutationFn: async () => {
-      const shouldDelete = await dialog.confirm(
-        "Are you sure you want to delete the recording?",
-        { title: "Confirm Delete", okLabel: "Delete", cancelLabel: "Cancel" }
-      );
+      // const shouldDelete = await dialog.confirm(
+      //   "Are you sure you want to delete the recording?",
+      //   { title: "Confirm Delete", okLabel: "Delete", cancelLabel: "Cancel" }
+      // );
 
-      if (!shouldDelete) return;
+      // if (!shouldDelete) return;
 
-      await commands.deleteRecording();
+      // await commands.deleteRecording();
 
-      setState({ variant: "stopped" });
+      // setState({ variant: "stopped" });
     },
   }));
 
@@ -223,19 +223,16 @@ export default function () {
             )}
           </div>
 
-          {(currentRecording.data?.type === "studio" ||
-            ostype() === "macos") && (
-            <ActionButton
-              disabled={togglePause.isPending}
-              onClick={() => togglePause.mutate()}
-            >
-              {state().variant === "paused" ? (
-                <IconCapPlayCircle />
-              ) : (
-                <IconCapPauseCircle />
-              )}
-            </ActionButton>
-          )}
+          <ActionButton
+            disabled={togglePause.isPending}
+            onClick={() => togglePause.mutate()}
+          >
+            {state().variant === "paused" ? (
+              <IconCapPlayCircle />
+            ) : (
+              <IconCapPauseCircle />
+            )}
+          </ActionButton>
 
           <ActionButton
             disabled={restartRecording.isPending}
@@ -287,17 +284,17 @@ function formatTime(secs: number) {
 function createAudioInputLevel() {
   const [level, setLevel] = createSignal(0);
 
-  createTauriEventListener(events.audioInputLevelChange, (dbs) => {
-    const DB_MIN = -60;
-    const DB_MAX = 0;
+  // createTauriEventListener(events.audioInputLevelChange, (dbs) => {
+  //   const DB_MIN = -60;
+  //   const DB_MAX = 0;
 
-    const dbValue = dbs ?? DB_MIN;
-    const normalizedLevel = Math.max(
-      0,
-      Math.min(1, (dbValue - DB_MIN) / (DB_MAX - DB_MIN))
-    );
-    setLevel(normalizedLevel);
-  });
+  //   const dbValue = dbs ?? DB_MIN;
+  //   const normalizedLevel = Math.max(
+  //     0,
+  //     Math.min(1, (dbValue - DB_MIN) / (DB_MAX - DB_MIN))
+  //   );
+  //   setLevel(normalizedLevel);
+  // });
 
   return level;
 }

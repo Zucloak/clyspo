@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolderPlus } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
-import { createFolder } from "@/actions/folders/createFolder";
+// import { createFolder } from "@/actions/folders/createFolder";
 import { toast } from "sonner";
 import { BlueFolder, NormalFolder, RedFolder, YellowFolder } from "./Folders";
 
@@ -57,23 +57,23 @@ export const NewFolderDialog: React.FC<Props> = ({ open, onOpenChange, spaceId }
   }, [open]);
 
   const createFolderHandler = async () => {
-    if (!selectedColor) return;
-    try {
-      setLoading(true);
-      await createFolder({
-        name: folderName,
-        color: selectedColor,
-        spaceId,
-      });
-      setFolderName("");
-      setSelectedColor(null);
-      onOpenChange(false);
-      toast.success("Folder created successfully");
-    } catch (error: any) {
-      toast.error("Failed to create folder");
-    } finally {
-      setLoading(false);
-    }
+    // if (!selectedColor) return;
+    // try {
+    //   setLoading(true);
+    //   await createFolder({
+    //     name: folderName,
+    //     color: selectedColor,
+    //     spaceId,
+    //   });
+    //   setFolderName("");
+    //   setSelectedColor(null);
+    //   onOpenChange(false);
+    //   toast.success("Folder created successfully");
+    // } catch (error: any) {
+    //   toast.error("Failed to create folder");
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   return (

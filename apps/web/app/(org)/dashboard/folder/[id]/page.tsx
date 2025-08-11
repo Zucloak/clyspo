@@ -1,26 +1,30 @@
 import { ClientMyCapsLink, NewSubfolderButton, BreadcrumbItem } from "./components";
 import Folder from "../../caps/components/Folder";
-import { getFolderBreadcrumb } from "@/actions/folders/getFolderBreadcrumb";
-import { getChildFolders } from "@/actions/folders/getChildFolders";
-import { getVideosByFolderId } from "@/actions/folders/getVideosByFolderId";
+// import { getFolderBreadcrumb } from "@/actions/folders/getFolderBreadcrumb";
+// import { getChildFolders } from "@/actions/folders/getChildFolders";
+// import { getVideosByFolderId } from "@/actions/folders/getVideosByFolderId";
 import { serverEnv } from "@cap/env";
 import { UploadCapButtonWithFolder } from "./components/UploadCapButtonWithFolder";
 import FolderVideosSection from "./components/FolderVideosSection";
 
 
 const FolderPage = async ({ params }: { params: { id: string } }) => {
-  const [childFolders, breadcrumb, videosData] = await Promise.all([
-    getChildFolders(params.id),
-    getFolderBreadcrumb(params.id),
-    getVideosByFolderId(params.id),
-  ]);
+  // const [childFolders, breadcrumb, videosData] = await Promise.all([
+  //   getChildFolders(params.id),
+  //   getFolderBreadcrumb(params.id),
+  //   getVideosByFolderId(params.id),
+  // ]);
+  const childFolders: any[] = [];
+  const breadcrumb: any[] = [];
+  const videosData: any[] = [];
+
 
   return (
 
     <div>
       <div className="flex gap-2 items-center mb-10">
-        <NewSubfolderButton parentFolderId={params.id} />
-        <UploadCapButtonWithFolder folderId={params.id} />
+        {/* <NewSubfolderButton parentFolderId={params.id} />
+        <UploadCapButtonWithFolder folderId={params.id} /> */}
       </div>
       <div className="flex justify-between items-center mb-6 w-full">
         <div className="flex overflow-x-auto items-center font-medium">

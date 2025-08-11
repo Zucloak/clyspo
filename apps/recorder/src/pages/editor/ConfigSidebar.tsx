@@ -30,10 +30,10 @@ import { createStore, produce } from "solid-js/store";
 import { Dynamic } from "solid-js/web";
 import toast from "solid-toast";
 import IconLucideSparkles from "~icons/lucide/sparkles";
-import colorBg from "~/assets/illustrations/color.webp";
-import gradientBg from "~/assets/illustrations/gradient.webp";
-import imageBg from "~/assets/illustrations/image.webp";
-import transparentBg from "~/assets/illustrations/transparent.webp";
+// import colorBg from "~/assets/illustrations/color.webp";
+// import gradientBg from "~/assets/illustrations/gradient.webp";
+// import imageBg from "~/assets/illustrations/image.webp";
+// import transparentBg from "~/assets/illustrations/transparent.webp";
 import { Toggle } from "~/components/Toggle";
 import { useEditorContext } from "./context";
 import {
@@ -64,12 +64,12 @@ const BACKGROUND_SOURCES = {
   gradient: "Gradient",
 } satisfies Record<BackgroundSource["type"], string>;
 
-const BACKGROUND_ICONS = {
-  wallpaper: imageBg,
-  image: transparentBg,
-  color: colorBg,
-  gradient: gradientBg,
-} satisfies Record<BackgroundSource["type"], string>;
+// const BACKGROUND_ICONS = {
+//   wallpaper: imageBg,
+//   image: transparentBg,
+//   color: colorBg,
+//   gradient: gradientBg,
+// } satisfies Record<BackgroundSource["type"], string>;
 
 const BACKGROUND_SOURCES_LIST = [
   "wallpaper",
@@ -540,53 +540,6 @@ function BackgroundConfig(props: { scrollRef: HTMLDivElement }) {
                           );
                         };
 
-                        const getImageBackground = () => {
-                          // Always start with the default icon
-                          let imageSrc: string = BACKGROUND_ICONS[item];
-
-                          // Only override for "image" if a valid path exists
-                          if (
-                            item === "image" &&
-                            project.background.source.type === "image" &&
-                            project.background.source.path
-                          ) {
-                            const convertedPath = convertFileSrc(
-                              project.background.source.path,
-                            );
-                            // Only use converted path if it's valid
-                            if (convertedPath) {
-                              imageSrc = convertedPath;
-                            }
-                          }
-                          // Only override for "wallpaper" if a valid wallpaper is found
-                          else if (
-                            item === "wallpaper" &&
-                            project.background.source.type === "wallpaper" &&
-                            project.background.source.path
-                          ) {
-                            const selectedWallpaper = wallpapers()?.find((w) =>
-                              (
-                                project.background.source as {
-                                  path?: string;
-                                }
-                              ).path?.includes(w.id),
-                            );
-                            // Only use wallpaper URL if it exists
-                            if (selectedWallpaper?.url) {
-                              imageSrc = selectedWallpaper.url;
-                            }
-                          }
-
-                          return (
-                            <img
-                              loading="eager"
-                              alt={BACKGROUND_SOURCES[item]}
-                              class="size-3.5 rounded"
-                              src={imageSrc}
-                            />
-                          );
-                        };
-
                         switch (item) {
                           case "gradient":
                             return getGradientBackground();
@@ -594,7 +547,7 @@ function BackgroundConfig(props: { scrollRef: HTMLDivElement }) {
                             return getColorBackground();
                           case "image":
                           case "wallpaper":
-                            return getImageBackground();
+                            return null;
                           default:
                             return null;
                         }

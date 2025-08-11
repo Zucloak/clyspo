@@ -6,9 +6,9 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { useTheme } from "../../Contexts";
-import { deleteFolder } from "@/actions/folders/deleteFolder";
-import { updateFolder } from "@/actions/folders/updateFolder";
-import { moveVideoToFolder } from "@/actions/folders/moveVideoToFolder";
+// import { deleteFolder } from "@/actions/folders/deleteFolder";
+// import { updateFolder } from "@/actions/folders/updateFolder";
+// import { moveVideoToFolder } from "@/actions/folders/moveVideoToFolder";
 import { registerDropTarget } from "../../folder/[id]/components/ClientCapCard";
 import { ConfirmationDialog } from "../../_components/ConfirmationDialog";
 import { FoldersDropdown } from "./FoldersDropdown";
@@ -62,16 +62,16 @@ const Folder = ({ name, color, id, parentId, videoCount, spaceId }: FolderDataTy
   });
 
   const deleteFolderHandler = async () => {
-    try {
-      setDeleteFolderLoading(true);
-      await deleteFolder(id, spaceId);
-      toast.success("Folder deleted successfully");
-    } catch (error) {
-      toast.error("Failed to delete folder");
-    } finally {
-      setDeleteFolderLoading(false);
-      setConfirmDeleteFolderOpen(false);
-    }
+    // try {
+    //   setDeleteFolderLoading(true);
+    //   await deleteFolder(id, spaceId);
+    //   toast.success("Folder deleted successfully");
+    // } catch (error) {
+    //   toast.error("Failed to delete folder");
+    // } finally {
+    //   setDeleteFolderLoading(false);
+    //   setConfirmDeleteFolderOpen(false);
+    // }
   };
 
   useEffect(() => {
@@ -82,98 +82,89 @@ const Folder = ({ name, color, id, parentId, videoCount, spaceId }: FolderDataTy
   }, [isRenaming]);
 
   // Register this folder as a drop target for mobile drag and drop
-  useEffect(() => {
-    if (!folderRef.current) return;
-
-    const unregister = registerDropTarget(
-      folderRef.current,
-      // onDrop handler
-      async (data) => {
-        if (!data || !data.id) return;
-
-        try {
-          setIsMovingVideo(true);
-          await moveVideoToFolder({ videoId: data.id, folderId: id, spaceId: spaceId ?? activeOrganization?.organization.id });
-          toast.success(`"${data.name}" moved to "${name}" folder`);
-        } catch (error) {
-          console.error("Error moving video to folder:", error);
-          toast.error("Failed to move video to folder");
-        } finally {
-          setIsMovingVideo(false);
-          dragStateRef.current.isDragging = false;
-        }
-      },
-      // onDragOver handler
-      () => {
-        dragStateRef.current.isDragging = true;
-        setIsDragOver(true);
-
-        // Clear any pending animation timer
-        if (animationTimerRef.current) {
-          clearTimeout(animationTimerRef.current);
-          animationTimerRef.current = null;
-        }
-
-        // Play the folder-open animation
-        if (rive) {
-          rive.stop();
-          rive.play("folder-open");
-        }
-      },
-      // onDragLeave handler
-      () => {
-        setIsDragOver(false);
-
-        // Clear any pending animation timer
-        if (animationTimerRef.current) {
-          clearTimeout(animationTimerRef.current);
-          animationTimerRef.current = null;
-        }
-
-        // Play the folder-close animation
-        if (rive) {
-          rive.stop();
-          rive.play("folder-close");
-        }
-      }
-    );
-
-    // Add global drag end listener
-    const handleDragEnd = () => {
-      if (dragStateRef.current.isDragging) {
-        dragStateRef.current.isDragging = false;
-        if (!isDragOver) {
-          // Only reset animation if we're not currently over this folder
-          if (rive) {
-            // Clear any pending animation timer
-            if (animationTimerRef.current) {
-              clearTimeout(animationTimerRef.current);
-              animationTimerRef.current = null;
-            }
-          }
-        }
-      }
-    };
-
-    document.addEventListener('dragend', handleDragEnd);
-
-    return () => {
-      unregister();
-      document.removeEventListener('dragend', handleDragEnd);
-    };
-  }, [id, name, rive, isDragOver]);
+  // useEffect(() => {
+  //   if (!folderRef.current) return;
+  //   const unregister = registerDropTarget(
+  //     folderRef.current,
+  //     // onDrop handler
+  //     async (data) => {
+  //       if (!data || !data.id) return;
+  //       try {
+  //         setIsMovingVideo(true);
+  //         await moveVideoToFolder({ videoId: data.id, folderId: id, spaceId: spaceId ?? activeOrganization?.organization.id });
+  //         toast.success(`"${data.name}" moved to "${name}" folder`);
+  //       } catch (error) {
+  //         console.error("Error moving video to folder:", error);
+  //         toast.error("Failed to move video to folder");
+  //       } finally {
+  //         setIsMovingVideo(false);
+  //         dragStateRef.current.isDragging = false;
+  //       }
+  //     },
+  //     // onDragOver handler
+  //     () => {
+  //       dragStateRef.current.isDragging = true;
+  //       setIsDragOver(true);
+  //       // Clear any pending animation timer
+  //       if (animationTimerRef.current) {
+  //         clearTimeout(animationTimerRef.current);
+  //         animationTimerRef.current = null;
+  //       }
+  //       // Play the folder-open animation
+  //       if (rive) {
+  //         rive.stop();
+  //         rive.play("folder-open");
+  //       }
+  //     },
+  //     // onDragLeave handler
+  //     () => {
+  //       setIsDragOver(false);
+  //       // Clear any pending animation timer
+  //       if (animationTimerRef.current) {
+  //         clearTimeout(animationTimerRef.current);
+  //         animationTimerRef.current = null;
+  //       }
+  //       // Play the folder-close animation
+  //       if (rive) {
+  //         rive.stop();
+  //         rive.play("folder-close");
+  //       }
+  //     }
+  //   );
+  //   // Add global drag end listener
+  //   const handleDragEnd = () => {
+  //     if (dragStateRef.current.isDragging) {
+  //       dragStateRef.current.isDragging = false;
+  //       if (!isDragOver) {
+  //         // Only reset animation if we're not currently over this folder
+  //         if (rive) {
+  //           // Clear any pending animation timer
+  //           if (animationTimerRef.current) {
+  //             clearTimeout(animationTimerRef.current);
+  //             animationTimerRef.current = null;
+  //           }
+  //         }
+  //       }
+  //     }
+  //   };
+  //   document.addEventListener('dragend', handleDragEnd);
+  //   return () => {
+  //     unregister();
+  //     document.removeEventListener('dragend', handleDragEnd);
+  //   };
+  // }, [id, name, rive, isDragOver]);
 
 
 
   const updateFolderNameHandler = async () => {
-    try {
-      await updateFolder({ folderId: id, name: updateName });
-      toast.success("Folder name updated successfully");
-    } catch (error) {
-      toast.error("Failed to update folder name");
-    } finally {
-      setIsRenaming(false);
-    }
+    // try {
+    //   await updateFolder({ folderId: id, name: updateName });
+    //   toast.success("Folder name updated successfully");
+    // } catch (error) {
+    //   toast.error("Failed to update folder name");
+    // } finally {
+    //   setIsRenaming(false);
+    // }
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -226,39 +217,34 @@ const Folder = ({ name, color, id, parentId, videoCount, spaceId }: FolderDataTy
   };
 
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragOver(false);
-    dragStateRef.current.isDragging = false;
-
-    // Clear any pending animation timer
-    if (animationTimerRef.current) {
-      clearTimeout(animationTimerRef.current);
-      animationTimerRef.current = null;
-    }
-
-    // Keep the folder open after a successful drop
-    if (rive) {
-      rive.stop();
-      rive.play("folder-close");
-    }
-
-    try {
-      const data = e.dataTransfer.getData("application/cap");
-      if (!data) return;
-
-      const capData = JSON.parse(data);
-      if (!capData.id) return;
-
-      setIsMovingVideo(true);
-      await moveVideoToFolder({ videoId: capData.id, folderId: id, spaceId });
-      toast.success(`"${capData.name}" moved to "${name}" folder`);
-    } catch (error) {
-      console.error("Error moving video to folder:", error);
-      toast.error("Failed to move video to folder");
-    } finally {
-      setIsMovingVideo(false);
-    }
+    // e.preventDefault();
+    // e.stopPropagation();
+    // setIsDragOver(false);
+    // dragStateRef.current.isDragging = false;
+    // // Clear any pending animation timer
+    // if (animationTimerRef.current) {
+    //   clearTimeout(animationTimerRef.current);
+    //   animationTimerRef.current = null;
+    // }
+    // // Keep the folder open after a successful drop
+    // if (rive) {
+    //   rive.stop();
+    //   rive.play("folder-close");
+    // }
+    // try {
+    //   const data = e.dataTransfer.getData("application/cap");
+    //   if (!data) return;
+    //   const capData = JSON.parse(data);
+    //   if (!capData.id) return;
+    //   setIsMovingVideo(true);
+    //   await moveVideoToFolder({ videoId: capData.id, folderId: id, spaceId });
+    //   toast.success(`"${capData.name}" moved to "${name}" folder`);
+    // } catch (error) {
+    //   console.error("Error moving video to folder:", error);
+    //   toast.error("Failed to move video to folder");
+    // } finally {
+    //   setIsMovingVideo(false);
+    // }
   };
 
 

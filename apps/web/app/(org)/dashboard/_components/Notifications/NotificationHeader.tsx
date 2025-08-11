@@ -2,7 +2,7 @@ import { faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "sonner";
 import clsx from "clsx";
-import { markAsRead } from "@/actions/notifications/mark-as-read";
+// import { markAsRead } from "@/actions/notifications/mark-as-read";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
@@ -12,19 +12,19 @@ export const NotificationHeader = () => {
   const queryClient = useQueryClient();
 
   const markAsReadHandler = async () => {
-    try {
-      setLoading(true);
-      await markAsRead();
-      toast.success("Notifications marked as read");
-      queryClient.invalidateQueries({
-        queryKey: ["notifications"],
-      });
-    } catch (error) {
-      console.error("Error marking notifications as read:", error);
-      toast.error("Failed to mark notifications as read");
-    } finally {
-      setLoading(false);
-    }
+    // try {
+    //   setLoading(true);
+    //   await markAsRead();
+    //   toast.success("Notifications marked as read");
+    //   queryClient.invalidateQueries({
+    //     queryKey: ["notifications"],
+    //   });
+    // } catch (error) {
+    //   console.error("Error marking notifications as read:", error);
+    //   toast.error("Failed to mark notifications as read");
+    // } finally {
+    //   setLoading(false);
+    // }
   }
 
   return (

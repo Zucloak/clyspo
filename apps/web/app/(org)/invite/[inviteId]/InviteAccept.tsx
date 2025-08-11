@@ -3,7 +3,7 @@
 import { userSelectProps } from "@cap/database/auth/session";
 import { Button, Logo } from "@cap/ui";
 import { LogOut } from "lucide-react";
-import { signOut } from "next-auth/react";
+// import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -101,7 +101,7 @@ export function InviteAccept({
           </Button>
         </div>
       </div>
-      {!user && (
+      {/* {!user && (
         <Button
           onClick={() => signOut({ callbackUrl: "/login" })}
           size="sm"
@@ -111,7 +111,7 @@ export function InviteAccept({
           <LogOut className="w-4 h-4 mr-2" />
           Sign Out
         </Button>
-      )}
+      )} */}
     </div>
   );
 }

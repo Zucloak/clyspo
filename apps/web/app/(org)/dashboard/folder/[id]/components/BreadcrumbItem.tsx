@@ -3,7 +3,7 @@
 import { AllFolders } from "../../../caps/components/Folders";
 import Link from "next/link";
 import { useState } from "react";
-import { moveVideoToFolder } from "@/actions/folders/moveVideoToFolder";
+// import { moveVideoToFolder } from "@/actions/folders/moveVideoToFolder";
 import { toast } from "sonner";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
@@ -52,7 +52,7 @@ export function BreadcrumbItem({ id, name, color, isLast }: BreadcrumbItemProps)
       if (!capData.id) return;
 
       setIsMoving(true);
-      await moveVideoToFolder({ videoId: capData.id, folderId: id });
+      // await moveVideoToFolder({ videoId: capData.id, folderId: id });
       router.refresh();
       toast.success(`"${capData.name}" moved to "${name}" folder`);
     } catch (error) {

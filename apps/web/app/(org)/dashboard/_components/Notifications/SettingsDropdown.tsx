@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Menu, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import { Fragment, useState } from "react";
-import { updatePreferences } from "@/actions/notifications/update-preferences";
+// import { updatePreferences } from "@/actions/notifications/update-preferences";
 import { toast } from "sonner";
 import { useDashboardContext } from "../../Contexts";
 
@@ -35,30 +35,28 @@ export const SettingsDropdown = () => {
   const { userPreferences } = useDashboardContext();
 
   const updateNotificationPreferences = async (option: NotificationOption) => {
-    try {
-      const currentPrefs = userPreferences?.notifications ?? {
-        pauseComments: false,
-        pauseReplies: false,
-        pauseViews: false,
-        pauseReactions: false,
-      };
-
-      await updatePreferences({
-        notifications: {
-          ...currentPrefs,
-          [option.value]: !(currentPrefs[option.value] ?? false),
-        },
-      });
-
-      toast.success(
-        `Notifications from ${option.label} have been ${
-          !(currentPrefs[option.value] ?? false) ? "paused" : "unpaused"
-        }`
-      );
-    } catch (error) {
-      console.error("Failed to update preferences:", error);
-      toast.error("Failed to update notification preferences");
-    }
+    // try {
+    //   const currentPrefs = userPreferences?.notifications ?? {
+    //     pauseComments: false,
+    //     pauseReplies: false,
+    //     pauseViews: false,
+    //     pauseReactions: false,
+    //   };
+    //   await updatePreferences({
+    //     notifications: {
+    //       ...currentPrefs,
+    //       [option.value]: !(currentPrefs[option.value] ?? false),
+    //     },
+    //   });
+    //   toast.success(
+    //     `Notifications from ${option.label} have been ${
+    //       !(currentPrefs[option.value] ?? false) ? "paused" : "unpaused"
+    //     }`
+    //   );
+    // } catch (error) {
+    //   console.error("Failed to update preferences:", error);
+    //   toast.error("Failed to update notification preferences");
+    // }
   };
 
   return (

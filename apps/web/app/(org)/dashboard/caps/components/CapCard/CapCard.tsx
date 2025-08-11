@@ -1,4 +1,4 @@
-import { downloadVideo } from "@/actions/videos/download";
+// import { downloadVideo } from "@/actions/videos/download";
 import { ConfirmationDialog } from "@/app/(org)/dashboard/_components/ConfirmationDialog";
 import { useDashboardContext } from "@/app/(org)/dashboard/Contexts";
 import { Tooltip } from "@/components/Tooltip";
@@ -24,7 +24,7 @@ import { SharingDialog } from "../SharingDialog";
 import { CapCardAnalytics } from "./CapCardAnalytics";
 import { CapCardButtons } from "./CapCardButtons";
 import { CapCardContent } from "./CapCardContent";
-import { duplicateVideo } from "@/actions/videos/duplicate";
+// import { duplicateVideo } from "@/actions/videos/duplicate";
 
 
 
@@ -188,45 +188,41 @@ export const CapCard = ({
   };
 
   const handleDownload = async () => {
-    if (isDownloading) return;
-
-    setIsDownloading(true);
-
-    try {
-      toast.promise(
-        downloadVideo(cap.id).then(async (response) => {
-          if (response.success && response.downloadUrl) {
-            const fetchResponse = await fetch(response.downloadUrl);
-            const blob = await fetchResponse.blob();
-
-            const blobUrl = window.URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = blobUrl;
-            link.download = response.filename;
-            link.style.display = "none";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            window.URL.revokeObjectURL(blobUrl);
-          }
-        }),
-        {
-          loading: "Preparing download...",
-          success: "Download started successfully",
-          error: (error) => {
-            if (error instanceof Error) {
-              return error.message;
-            }
-            return "Failed to download video - please try again.";
-          },
-        }
-      );
-    } catch (error) {
-      console.error("Download error:", error);
-    } finally {
-      setIsDownloading(false);
-    }
+    // if (isDownloading) return;
+    // setIsDownloading(true);
+    // try {
+    //   toast.promise(
+    //     downloadVideo(cap.id).then(async (response) => {
+    //       if (response.success && response.downloadUrl) {
+    //         const fetchResponse = await fetch(response.downloadUrl);
+    //         const blob = await fetchResponse.blob();
+    //         const blobUrl = window.URL.createObjectURL(blob);
+    //         const link = document.createElement("a");
+    //         link.href = blobUrl;
+    //         link.download = response.filename;
+    //         link.style.display = "none";
+    //         document.body.appendChild(link);
+    //         link.click();
+    //         document.body.removeChild(link);
+    //         window.URL.revokeObjectURL(blobUrl);
+    //       }
+    //     }),
+    //     {
+    //       loading: "Preparing download...",
+    //       success: "Download started successfully",
+    //       error: (error) => {
+    //         if (error instanceof Error) {
+    //           return error.message;
+    //         }
+    //         return "Failed to download video - please try again.";
+    //       },
+    //     }
+    //   );
+    // } catch (error) {
+    //   console.error("Download error:", error);
+    // } finally {
+    //   setIsDownloading(false);
+    // }
   };
 
 
@@ -334,14 +330,14 @@ export const CapCard = ({
                 sideOffset={5}
               >
                 <DropdownMenuItem
-                  onClick={async () => {
-                    try {
-                      await duplicateVideo(cap.id)
-                      toast.success("Cap duplicated successfully");
-                    } catch (error) {
-                      toast.error("Failed to duplicate cap");
-                    }
-                  }}
+                  // onClick={async () => {
+                  //   try {
+                  //     await duplicateVideo(cap.id)
+                  //     toast.success("Cap duplicated successfully");
+                  //   } catch (error) {
+                  //     toast.error("Failed to duplicate cap");
+                  //   }
+                  // }}
                   className="flex gap-2 items-center rounded-lg"
                 >
                   <FontAwesomeIcon

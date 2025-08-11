@@ -14,10 +14,10 @@ import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
-import {
-  setVideoPassword,
-  removeVideoPassword,
-} from "@/actions/videos/password";
+// import {
+//   setVideoPassword,
+//   removeVideoPassword,
+// } from "@/actions/videos/password";
 
 interface PasswordDialogProps {
   isOpen: boolean;
@@ -37,34 +37,36 @@ export const PasswordDialog: React.FC<PasswordDialogProps> = ({
   const [password, setPassword] = useState("");
 
   const updatePassword = useMutation({
-    mutationFn: () =>
-      setVideoPassword(videoId, password).then((v) => {
-        if (v.success) return v.value;
-        throw new Error(v.error);
-      }),
+    mutationFn: () => {
+      // setVideoPassword(videoId, password).then((v) => {
+      //   if (v.success) return v.value;
+      //   throw new Error(v.error);
+      // })
+    },
     onSuccess: (result) => {
-      toast.success(result);
+      // toast.success(result);
       onPasswordUpdated(true);
       onClose();
     },
     onError: (e) => {
-      toast.error(e.message);
+      // toast.error(e.message);
     },
   });
 
   const removePassword = useMutation({
-    mutationFn: () =>
-      removeVideoPassword(videoId).then((v) => {
-        if (v.success) return v.value;
-        throw new Error(v.error);
-      }),
+    mutationFn: () => {
+      // removeVideoPassword(videoId).then((v) => {
+      //   if (v.success) return v.value;
+      //   throw new Error(v.error);
+      // })
+    },
     onSuccess: (result) => {
-      toast.success(result);
+      // toast.success(result);
       onPasswordUpdated(false);
       onClose();
     },
     onError: (e) => {
-      toast.error(e.message);
+      // toast.error(e.message);
     },
   });
 

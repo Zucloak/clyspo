@@ -5,7 +5,7 @@ import { faCopy, faEllipsis, faPencil, faTrash } from "@fortawesome/free-solid-s
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { RefObject } from "react";
 import { toast } from "sonner";
-import { duplicateFolder } from "@/actions/folders/duplicateFolder";
+// import { duplicateFolder } from "@/actions/folders/duplicateFolder";
 import { useDashboardContext } from "../../Contexts";
 
 interface FoldersDropdownProps {
@@ -59,18 +59,18 @@ export const FoldersDropdown = ({
                 }
               },
               // Only show Duplicate if there is NO active space
-              ...(!activeSpace ? [{
-                label: "Duplicate",
-                icon: faCopy,
-                onClick: async () => {
-                  try {
-                    await duplicateFolder(id, parentId);
-                    toast.success("Folder duplicated successfully");
-                  } catch (error) {
-                    toast.error("Failed to duplicate folder");
-                  }
-                }
-              }] : []),
+              // ...(!activeSpace ? [{
+              //   label: "Duplicate",
+              //   icon: faCopy,
+              //   onClick: async () => {
+              //     try {
+              //       await duplicateFolder(id, parentId);
+              //       toast.success("Folder duplicated successfully");
+              //     } catch (error) {
+              //       toast.error("Failed to duplicate folder");
+              //     }
+              //   }
+              // }] : []),
               {
                 label: "Delete",
                 icon: faTrash,

@@ -1,29 +1,32 @@
 "use client";
 
 import { useState } from "react";
-import { lookupUserById } from "./actions";
+// import { lookupUserById } from "./actions";
 
 export default function UserLookup() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const formData = new FormData(e.currentTarget);
-      const result = await lookupUserById(formData);
-      setData(result);
-    } catch (error) {
-      console.error("Error looking up user:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     const formData = new FormData(e.currentTarget);
+  //     const result = await lookupUserById(formData);
+  //     setData(result);
+  //   } catch (error) {
+  //     console.error("Error looking up user:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form
+        // onSubmit={handleSubmit}
+        className="space-y-4"
+      >
         <div>
           <label
             htmlFor="userId"

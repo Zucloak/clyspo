@@ -1,28 +1,26 @@
-import { getCurrentUser } from "@cap/database/auth/session";
+// import { getCurrentUser } from "@cap/database/auth/session";
 import { LogoBadge } from "@cap/ui";
-import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 import { Onboarding } from "./Onboarding";
 
-export const dynamic = "force-dynamic";
-
 export default async function OnboardingPage() {
-  const user = await getCurrentUser();
+  // const user = await getCurrentUser();
 
-  if (!user) {
-    redirect("/login");
-  }
+  // if (!user) {
+  //   redirect("/login");
+  // }
 
-  if (
-    user &&
-    user.name &&
-    user.name.length > 1 &&
-    user.activeOrganizationId &&
-    user.activeOrganizationId.length > 1
-  ) {
-    redirect("/dashboard");
-  } else if (!user) {
-    redirect("/login");
-  }
+  // if (
+  //   user &&
+  //   user.name &&
+  //   user.name.length > 1 &&
+  //   user.activeOrganizationId &&
+  //   user.activeOrganizationId.length > 1
+  // ) {
+  //   redirect("/dashboard");
+  // } else if (!user) {
+  //   redirect("/login");
+  // }
 
   return (
     <div className="flex justify-center items-center w-full h-screen bg-gray-1">

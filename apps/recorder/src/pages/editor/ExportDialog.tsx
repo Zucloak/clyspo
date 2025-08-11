@@ -6,7 +6,7 @@ import {
   createQuery,
   keepPreviousData,
 } from "@tanstack/solid-query";
-import { save as saveDialog } from "@tauri-apps/plugin-dialog";
+// import { save as saveDialog } from "@tauri-apps/plugin-dialog";
 import { cx } from "cva";
 import {
   createEffect,
@@ -24,15 +24,15 @@ import { createStore, produce, reconcile } from "solid-js/store";
 import toast from "solid-toast";
 
 import { authStore } from "~/store";
-import { trackEvent } from "~/utils/analytics";
-import { exportVideo } from "~/utils/export";
-import {
-  commands,
-  events,
-  ExportCompression,
-  ExportSettings,
-  FramesRendered,
-} from "~/utils/tauri";
+// import { trackEvent } from "~/utils/analytics";
+// import { exportVideo } from "~/utils/export";
+// import {
+//   commands,
+//   events,
+//   ExportCompression,
+//   ExportSettings,
+//   FramesRendered,
+// } from "~/utils/tauri";
 import { RenderState, useEditorContext } from "./context";
 import { RESOLUTION_OPTIONS } from "./Header";
 import {
@@ -43,7 +43,7 @@ import {
   PopperContent,
   topSlideAnimateClasses,
 } from "./ui";
-import { createSignInMutation } from "~/utils/auth";
+// import { createSignInMutation } from "~/utils/auth";
 import { SignInButton } from "~/components/SignInButton";
 
 export const COMPRESSION_OPTIONS: Array<{
@@ -130,20 +130,20 @@ export function ExportDialog() {
 
   if (!["Mp4", "Gif"].includes(settings.format)) setSettings("format", "Mp4");
 
-  const exportWithSettings = (onProgress: (progress: FramesRendered) => void) =>
-    exportVideo(
-      projectPath,
-      {
-        format: settings.format,
-        fps: settings.fps,
-        resolution_base: {
-          x: settings.resolution.width,
-          y: settings.resolution.height,
-        },
-        compression: settings.compression,
-      },
-      onProgress
-    );
+  // const exportWithSettings = (onProgress: (progress: FramesRendered) => void) =>
+  //   exportVideo(
+  //     projectPath,
+  //     {
+  //       format: settings.format,
+  //       fps: settings.fps,
+  //       resolution_base: {
+  //         x: settings.resolution.width,
+  //         y: settings.resolution.height,
+  //       },
+  //       compression: settings.compression,
+  //     },
+  //     onProgress
+  //   );
 
   const [outputPath, setOutputPath] = createSignal<string | null>(null);
 
@@ -152,22 +152,22 @@ export function ExportDialog() {
 
   const projectPath = editorInstance.path;
 
-  const exportEstimates = createQuery(() => ({
-    // prevents flicker when modifying settings
-    placeholderData: keepPreviousData,
-    queryKey: [
-      "exportEstimates",
-      {
-        resolution: {
-          x: settings.resolution.width,
-          y: settings.resolution.height,
-        },
-        fps: settings.fps,
-      },
-    ] as const,
-    queryFn: ({ queryKey: [_, { resolution, fps }] }) =>
-      commands.getExportEstimates(projectPath, resolution, fps),
-  }));
+  // const exportEstimates = createQuery(() => ({
+  //   // prevents flicker when modifying settings
+  //   placeholderData: keepPreviousData,
+  //   queryKey: [
+  //     "exportEstimates",
+  //     {
+  //       resolution: {
+  //         x: settings.resolution.width,
+  //         y: settings.resolution.height,
+  //       },
+  //       fps: settings.fps,
+  //     },
+  //   ] as const,
+  //   queryFn: ({ queryKey: [_, { resolution, fps }] }) =>
+  //     commands.getExportEstimates(projectPath, resolution, fps),
+  // }));
 
   const exportButtonIcon: Record<"file" | "clipboard" | "link", JSX.Element> = {
     file: <IconCapFile class="text-gray-1 size-4" />,
@@ -177,193 +177,170 @@ export function ExportDialog() {
 
   const copy = createMutation(() => ({
     mutationFn: async () => {
-      if (exportState.type !== "idle") return;
-      setExportState(reconcile({ action: "copy", type: "starting" }));
-
-      const outputPath = await exportWithSettings((progress) => {
-        setExportState({ type: "rendering", progress });
-      });
-
-      setExportState({ type: "copying" });
-
-      await commands.copyVideoToClipboard(outputPath);
+      // if (exportState.type !== "idle") return;
+      // setExportState(reconcile({ action: "copy", type: "starting" }));
+      // const outputPath = await exportWithSettings((progress) => {
+      //   setExportState({ type: "rendering", progress });
+      // });
+      // setExportState({ type: "copying" });
+      // await commands.copyVideoToClipboard(outputPath);
     },
     onError: (error) => {
-      commands.globalMessageDialog(
-        error instanceof Error ? error.message : "Failed to copy recording"
-      );
+      // commands.globalMessageDialog(
+      //   error instanceof Error ? error.message : "Failed to copy recording"
+      // );
       setExportState(reconcile({ type: "idle" }));
     },
     onSuccess() {
-      setExportState({ type: "done" });
-
-      if (dialog().open) {
-        createRoot((dispose) => {
-          createEffect(
-            on(
-              () => dialog().open,
-              () => {
-                dispose();
-              },
-              { defer: true }
-            )
-          );
-        });
-      } else
-        toast.success(
-          `${settings.format === "Gif" ? "GIF" : "Recording"
-          } exported to clipboard`
-        );
+      // setExportState({ type: "done" });
+      // if (dialog().open) {
+      //   createRoot((dispose) => {
+      //     createEffect(
+      //       on(
+      //         () => dialog().open,
+      //         () => {
+      //           dispose();
+      //         },
+      //         { defer: true }
+      //       )
+      //     );
+      //   });
+      // } else
+      //   toast.success(
+      //     `${settings.format === "Gif" ? "GIF" : "Recording"
+      //     } exported to clipboard`
+      //   );
     },
   }));
 
   const save = createMutation(() => ({
     mutationFn: async () => {
-      if (exportState.type !== "idle") return;
-
-      const extension = settings.format === "Gif" ? "gif" : "mp4";
-      const savePath = await saveDialog({
-        filters: [
-          {
-            name: `${extension.toUpperCase()} filter`,
-            extensions: [extension],
-          },
-        ],
-        defaultPath: `~/Desktop/${meta().prettyName}.${extension}`,
-      });
-      if (!savePath) {
-        setExportState(reconcile({ type: "idle" }));
-        return;
-      }
-
-      setExportState(reconcile({ action: "save", type: "starting" }));
-
-      setOutputPath(savePath);
-
-      trackEvent("export_started", {
-        resolution: settings.resolution,
-        fps: settings.fps,
-        path: savePath,
-      });
-
-      const videoPath = await exportWithSettings((progress) => {
-        setExportState({ type: "rendering", progress });
-      });
-
-      setExportState({ type: "copying" });
-
-      await commands.copyFileToPath(videoPath, savePath);
-
-      setExportState({ type: "done" });
+      // if (exportState.type !== "idle") return;
+      // const extension = settings.format === "Gif" ? "gif" : "mp4";
+      // const savePath = await saveDialog({
+      //   filters: [
+      //     {
+      //       name: `${extension.toUpperCase()} filter`,
+      //       extensions: [extension],
+      //     },
+      //   ],
+      //   defaultPath: `~/Desktop/${meta().prettyName}.${extension}`,
+      // });
+      // if (!savePath) {
+      //   setExportState(reconcile({ type: "idle" }));
+      //   return;
+      // }
+      // setExportState(reconcile({ action: "save", type: "starting" }));
+      // setOutputPath(savePath);
+      // trackEvent("export_started", {
+      //   resolution: settings.resolution,
+      //   fps: settings.fps,
+      //   path: savePath,
+      // });
+      // const videoPath = await exportWithSettings((progress) => {
+      //   setExportState({ type: "rendering", progress });
+      // });
+      // setExportState({ type: "copying" });
+      // await commands.copyFileToPath(videoPath, savePath);
+      // setExportState({ type: "done" });
     },
     onError: (error) => {
-      commands.globalMessageDialog(
-        error instanceof Error
-          ? error.message
-          : `Failed to export recording: ${error}`
-      );
+      // commands.globalMessageDialog(
+      //   error instanceof Error
+      //     ? error.message
+      //     : `Failed to export recording: ${error}`
+      // );
       setExportState({ type: "idle" });
     },
     onSuccess() {
-      if (dialog().open) {
-        createRoot((dispose) => {
-          createEffect(
-            on(
-              () => dialog().open,
-              () => {
-                dispose();
-              },
-              { defer: true }
-            )
-          );
-        });
-      } else
-        toast.success(
-          `${settings.format === "Gif" ? "GIF" : "Recording"} exported to file`
-        );
+      // if (dialog().open) {
+      //   createRoot((dispose) => {
+      //     createEffect(
+      //       on(
+      //         () => dialog().open,
+      //         () => {
+      //           dispose();
+      //         },
+      //         { defer: true }
+      //       )
+      //     );
+      //   });
+      // } else
+      //   toast.success(
+      //     `${settings.format === "Gif" ? "GIF" : "Recording"} exported to file`
+      //   );
     },
   }));
 
   const upload = createMutation(() => ({
     mutationFn: async () => {
-      if (exportState.type !== "idle") return;
-      setExportState(reconcile({ action: "upload", type: "starting" }));
-
-      // Check authentication first
-      const existingAuth = await authStore.get();
-      if (!existingAuth) createSignInMutation();
-      trackEvent("create_shareable_link_clicked", {
-        resolution: settings.resolution,
-        fps: settings.fps,
-        has_existing_auth: !!existingAuth,
-      });
-
-      const metadata = await commands.getVideoMetadata(projectPath);
-      const plan = await commands.checkUpgradedAndUpdate();
-      const canShare = {
-        allowed: plan || metadata.duration < 300,
-        reason: !plan && metadata.duration >= 300 ? "upgrade_required" : null,
-      };
-
-      if (!canShare.allowed) {
-        if (canShare.reason === "upgrade_required") {
-          await commands.showWindow("Upgrade");
-          throw new Error(
-            "Upgrade required to share recordings longer than 5 minutes"
-          );
-        }
-      }
-
-      const unlisten = await events.uploadProgress.listen((event) => {
-        console.log("Upload progress event:", event.payload);
-        setExportState(
-          produce((state) => {
-            if (state.type !== "uploading") return;
-
-            state.progress = Math.round(event.payload.progress * 100);
-          })
-        );
-      });
-
-      try {
-        await exportWithSettings((progress) =>
-          setExportState({ type: "rendering", progress })
-        );
-
-        setExportState({ type: "uploading", progress: 0 });
-
-        // Now proceed with upload
-        const result = meta().sharing
-          ? await commands.uploadExportedVideo(projectPath, "Reupload")
-          : await commands.uploadExportedVideo(projectPath, {
-            Initial: { pre_created_video: null },
-          });
-
-        if (result === "NotAuthenticated")
-          throw new Error("You need to sign in to share recordings");
-        else if (result === "PlanCheckFailed")
-          throw new Error("Failed to verify your subscription status");
-        else if (result === "UpgradeRequired")
-          throw new Error("This feature requires an upgraded plan");
-      } finally {
-        unlisten();
-      }
+      // if (exportState.type !== "idle") return;
+      // setExportState(reconcile({ action: "upload", type: "starting" }));
+      // // Check authentication first
+      // const existingAuth = await authStore.get();
+      // if (!existingAuth) {
+      //   // createSignInMutation();
+      // }
+      // // trackEvent("create_shareable_link_clicked", {
+      //   resolution: settings.resolution,
+      //   fps: settings.fps,
+      //   has_existing_auth: !!existingAuth,
+      // });
+      // const metadata = await commands.getVideoMetadata(projectPath);
+      // const plan = await commands.checkUpgradedAndUpdate();
+      // const canShare = {
+      //   allowed: plan || metadata.duration < 300,
+      //   reason: !plan && metadata.duration >= 300 ? "upgrade_required" : null,
+      // };
+      // if (!canShare.allowed) {
+      //   if (canShare.reason === "upgrade_required") {
+      //     await commands.showWindow("Upgrade");
+      //     throw new Error(
+      //       "Upgrade required to share recordings longer than 5 minutes"
+      //     );
+      //   }
+      // }
+      // const unlisten = await events.uploadProgress.listen((event) => {
+      //   console.log("Upload progress event:", event.payload);
+      //   setExportState(
+      //     produce((state) => {
+      //       if (state.type !== "uploading") return;
+      //       state.progress = Math.round(event.payload.progress * 100);
+      //     })
+      //   );
+      // });
+      // try {
+      //   await exportWithSettings((progress) =>
+      //     setExportState({ type: "rendering", progress })
+      //   );
+      //   setExportState({ type: "uploading", progress: 0 });
+      //   // Now proceed with upload
+      //   const result = meta().sharing
+      //     ? await commands.uploadExportedVideo(projectPath, "Reupload")
+      //     : await commands.uploadExportedVideo(projectPath, {
+      //       Initial: { pre_created_video: null },
+      //     });
+      //   if (result === "NotAuthenticated")
+      //     throw new Error("You need to sign in to share recordings");
+      //   else if (result === "PlanCheckFailed")
+      //     throw new Error("Failed to verify your subscription status");
+      //   else if (result === "UpgradeRequired")
+      //     throw new Error("This feature requires an upgraded plan");
+      // } finally {
+      //   unlisten();
+      // }
     },
     onSuccess: async () => {
-      const d = dialog();
-      if ("type" in d && d.type === "export") setDialog({ ...d, open: true });
-
-      await refetchMeta();
-
-      console.log(meta().sharing);
-
-      setExportState({ type: "done" });
+      // const d = dialog();
+      // if ("type" in d && d.type === "export") setDialog({ ...d, open: true });
+      // await refetchMeta();
+      // console.log(meta().sharing);
+      // setExportState({ type: "done" });
     },
     onError: (error) => {
-      commands.globalMessageDialog(
-        error instanceof Error ? error.message : "Failed to upload recording"
-      );
-
+      // commands.globalMessageDialog(
+      //   error instanceof Error ? error.message : "Failed to upload recording"
+      // );
       setExportState(reconcile({ type: "idle" }));
     },
   }));
@@ -375,12 +352,12 @@ export function ExportDialog() {
           title="Export"
           confirm={
             <>
-              {settings.exportTo === "link" && !auth.data ? (
+              {/* {settings.exportTo === "link" && !auth.data ? (
                 <SignInButton>
                   {exportButtonIcon[settings.exportTo]}
                   <span class="ml-1.5">Sign in to share</span>
                 </SignInButton>
-              ) : (
+              ) : ( */}
                 <Button
                   class="flex gap-1.5 items-center"
                   variant="primary"
@@ -562,9 +539,9 @@ export function ExportDialog() {
                   onChange={(option) => {
                     const value =
                       option?.value ?? (settings.format === "Gif" ? 10 : 30);
-                    trackEvent("export_fps_changed", {
-                      fps: value,
-                    });
+                    // trackEvent("export_fps_changed", {
+                    //   fps: value,
+                    // });
                     setSettings("fps", value);
                   }}
                   itemComponent={(props) => (

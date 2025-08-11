@@ -1,7 +1,7 @@
 "use client";
 
-import { shareCap } from "@/actions/caps/share";
-import { deleteSpace } from "@/actions/organization/delete-space";
+// import { shareCap } from "@/actions/caps/share";
+// import { deleteSpace } from "@/actions/organization/delete-space";
 import { Tooltip } from "@/components/Tooltip";
 import { Avatar, Button } from "@cap/ui";
 import {
@@ -49,27 +49,27 @@ const SpacesList = ({ toggleMobileNav }: { toggleMobileNav?: () => void }) => {
   };
 
   const confirmRemoveSpace = async () => {
-    if (!pendingDeleteSpace) return;
-    setRemoving(true);
-    try {
-      const result = await deleteSpace(pendingDeleteSpace.id);
-      if (result.success) {
-        toast.success("Space deleted successfully");
-        router.refresh();
-        if (params.spaceId === pendingDeleteSpace.id) {
-          router.push("/dashboard");
-        }
-      } else {
-        toast.error(result.error || "Failed to delete space");
-      }
-    } catch (error) {
-      console.error("Error deleting space:", error);
-      toast.error("Failed to delete space");
-    } finally {
-      setRemoving(false);
-      setConfirmOpen(false);
-      setPendingDeleteSpace(null);
-    }
+    // if (!pendingDeleteSpace) return;
+    // setRemoving(true);
+    // try {
+    //   const result = await deleteSpace(pendingDeleteSpace.id);
+    //   if (result.success) {
+    //     toast.success("Space deleted successfully");
+    //     router.refresh();
+    //     if (params.spaceId === pendingDeleteSpace.id) {
+    //       router.push("/dashboard");
+    //     }
+    //   } else {
+    //     toast.error(result.error || "Failed to delete space");
+    //   }
+    // } catch (error) {
+    //   console.error("Error deleting space:", error);
+    //   toast.error("Failed to delete space");
+    // } finally {
+    //   setRemoving(false);
+    //   setConfirmOpen(false);
+    //   setPendingDeleteSpace(null);
+    // }
   };
 
 
@@ -93,32 +93,28 @@ const SpacesList = ({ toggleMobileNav }: { toggleMobileNav?: () => void }) => {
   };
 
   const handleDrop = async (e: React.DragEvent, spaceId: string) => {
-    e.preventDefault();
-    setActiveDropTarget(null);
-
-    try {
-      const capData = e.dataTransfer.getData("application/cap");
-      if (!capData) return;
-
-      const cap = JSON.parse(capData);
-
-      // Call the share action with just this space ID
-      const result = await shareCap({
-        capId: cap.id,
-        spaceIds: [spaceId],
-      });
-
-      if (result.success) {
-        const space = spacesData.find((s) => s.id === spaceId);
-        toast.success(`Shared "${cap.name}" to ${space?.name || "space"}`);
-        router.refresh();
-      } else {
-        toast.error(result.error || "Failed to share cap");
-      }
-    } catch (error) {
-      console.error("Error sharing cap:", error);
-      toast.error("Failed to share cap");
-    }
+    // e.preventDefault();
+    // setActiveDropTarget(null);
+    // try {
+    //   const capData = e.dataTransfer.getData("application/cap");
+    //   if (!capData) return;
+    //   const cap = JSON.parse(capData);
+    //   // Call the share action with just this space ID
+    //   const result = await shareCap({
+    //     capId: cap.id,
+    //     spaceIds: [spaceId],
+    //   });
+    //   if (result.success) {
+    //     const space = spacesData.find((s) => s.id === spaceId);
+    //     toast.success(`Shared "${cap.name}" to ${space?.name || "space"}`);
+    //     router.refresh();
+    //   } else {
+    //     toast.error(result.error || "Failed to share cap");
+    //   }
+    // } catch (error) {
+    //   console.error("Error sharing cap:", error);
+    //   toast.error("Failed to share cap");
+    // }
   };
 
   const activeSpaceParams = (spaceId: string) => params.spaceId === spaceId;

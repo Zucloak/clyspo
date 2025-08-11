@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolderPlus } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
-import { createFolder } from "@/actions/folders/createFolder";
+// import { createFolder } from "@/actions/folders/createFolder";
 import { toast } from "sonner";
 import { BlueFolder, NormalFolder, RedFolder, YellowFolder } from "../../../caps/components/Folders";
 import { useDashboardContext } from "../../../Contexts";
@@ -63,26 +63,26 @@ export const SubfolderDialog: React.FC<Props> = ({ open, onOpenChange, parentFol
     }
   }, [open]);
 
-  const createSubfolderHandler = async () => {
-    if (!selectedColor) return;
-    try {
-      setLoading(true);
-      await createFolder({
-        name: folderName,
-        color: selectedColor,
-        parentId: parentFolderId,
-        spaceId: activeSpace?.id,
-      });
-      setFolderName("");
-      setSelectedColor(null);
-      onOpenChange(false);
-      toast.success("Subfolder created successfully");
-    } catch (error: any) {
-      toast.error("Failed to create subfolder");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const createSubfolderHandler = async () => {
+  //   if (!selectedColor) return;
+  //   try {
+  //     setLoading(true);
+  //     await createFolder({
+  //       name: folderName,
+  //       color: selectedColor,
+  //       parentId: parentFolderId,
+  //       spaceId: activeSpace?.id,
+  //     });
+  //     setFolderName("");
+  //     setSelectedColor(null);
+  //     onOpenChange(false);
+  //     toast.success("Subfolder created successfully");
+  //   } catch (error: any) {
+  //     toast.error("Failed to create subfolder");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -145,7 +145,7 @@ export const SubfolderDialog: React.FC<Props> = ({ open, onOpenChange, parentFol
             Cancel
           </Button>
           <Button
-            onClick={createSubfolderHandler}
+            // onClick={createSubfolderHandler}
             size="sm"
             spinner={loading}
             variant="dark"

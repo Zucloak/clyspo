@@ -35,7 +35,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { cloneElement, useRef, useState } from "react";
 import { useDashboardContext } from "../../Contexts";
 import { CogIcon, CapIcon } from "../AnimatedIcons";
-import { updateActiveOrganization } from "./server";
+// import { updateActiveOrganization } from "./server";
 import SpacesList from "./SpacesList";
 import { CogIconHandle } from "../AnimatedIcons/Cog";
 
@@ -193,13 +193,13 @@ const AdminNavItems = ({ toggleMobileNav }: Props) => {
                               : "text-gray-10 hover:text-gray-12 hover:bg-gray-6"
                           )}
                           key={organization.organization.name + "-organization"}
-                          onSelect={async () => {
-                            await updateActiveOrganization(
-                              organization.organization.id
-                            );
-                            setOpen(false);
-                            router.push("/dashboard/caps");
-                          }}
+                          // onSelect={async () => {
+                          //   await updateActiveOrganization(
+                          //     organization.organization.id
+                          //   );
+                          //   setOpen(false);
+                          //   router.push("/dashboard/caps");
+                          // }}
                         >
                           <div className="flex gap-2 items-center w-full">
                             {organization.organization.iconUrl ? (
