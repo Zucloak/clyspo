@@ -3,7 +3,6 @@
 
 "use client";
 
-import MuxPlayer from "@mux/mux-player-react";
 import { useClickAway } from "@uidotdev/usehooks";
 import { motion } from "framer-motion";
 import React from "react";
@@ -33,16 +32,9 @@ interface Props {
             damping: 20,
           }}
           ref={ref}
-          className="w-[calc(100%-20px)] max-w-[1000px] bg-gray-1 rounded-[16px] md:h-[700px] h-[300px]"
+          className="w-[calc(100%-20px)] max-w-[1000px] bg-gray-1 rounded-[16px] md:h-[700px] h-[300px] flex items-center justify-center"
         >
-          <MuxPlayer
-            playbackId="A6oZoUWVZjOIVZB6XnBMLagYnXE6xhDhp8Hcyky018hk"
-            metadataVideoTitle="Placeholder (optional)"
-            metadata-viewer-user-id="Placeholder (optional)"
-            accentColor="#5C9FFF"
-            className="h-full rounded-[16px] overflow-hidden select-none"
-            autoPlay
-          />
+          <div className="text-white">Video player removed</div>
         </motion.div>
       </motion.div>
     );

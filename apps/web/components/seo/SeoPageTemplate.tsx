@@ -2,7 +2,6 @@
 
 import { SeoPageContent } from "@/components/seo/types";
 import { Button } from "@cap/ui";
-import MuxPlayer from "@mux/mux-player-react";
 
 
 const renderHTML = (content: string) => {
@@ -41,7 +40,7 @@ export const SeoPageTemplate = ({
           <div className="flex flex-col justify-center items-center space-y-2 fade-in-up animate-delay-2 sm:flex-row sm:space-y-0 sm:space-x-4">
             <Button
               variant="blue"
-              href="/download"
+              href="#"
               size="lg"
               className="relative z-[20] w-full font-medium text-md sm:w-auto"
             >
@@ -85,32 +84,6 @@ export const SeoPageTemplate = ({
             ))}
           </div>
         </div>
-
-        {/* Video Demonstration */}
-        {showVideo && (
-          <div className="mb-28">
-            <div className="text-center max-w-[800px] mx-auto mb-10">
-              <h2 className="inline-block relative mb-6 text-4xl font-medium text-gray-800">
-                See Cap In Action
-                <span className="absolute -bottom-2 left-1/2 w-20 h-1 bg-blue-500 rounded-full transform -translate-x-1/2"></span>
-              </h2>
-              <p className="text-xl leading-relaxed text-gray-600">
-                Watch how Cap makes screen recording simple, powerful, and
-                accessible.
-              </p>
-            </div>
-            <div className="mx-auto max-w-2xl">
-              <div className="overflow-hidden rounded-xl shadow-lg">
-                <MuxPlayer
-                  playbackId="A6oZoUWVZjOIVZB6XnBMLagYnXE6xhDhp8Hcyky018hk"
-                  metadataVideoTitle="Cap Demo"
-                  accentColor="#5C9FFF"
-                  style={{ aspectRatio: "16/9", width: "100%" }}
-                />
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Comparison Section */}
         {content.comparison && content.comparisonTitle && (

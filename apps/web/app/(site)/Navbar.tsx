@@ -18,8 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Suspense, use, useState } from "react";
-import { useAuthContext } from "../Layout/AuthContext";
+import { Suspense, useState } from "react";
 import MobileMenu from "@/components/ui/MobileMenu";
 
 const Links = [
@@ -98,7 +97,6 @@ const Links = [
 export const Navbar = () => {
   const pathname = usePathname();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const auth = use(useAuthContext().user);
 
   return (
     <>
@@ -168,20 +166,14 @@ export const Navbar = () => {
               >
                 Github
               </Button>
-              <Suspense
-                fallback={
-                  <Button
-                    variant="dark"
-                    disabled
-                    size="sm"
-                    className="w-full font-medium sm:w-auto"
-                  >
-                    Loading...
-                  </Button>
-                }
+              <Button
+                variant="dark"
+                href="/"
+                size="sm"
+                className="w-full font-medium sm:w-auto"
               >
-                <LoginOrDashboard />
-              </Suspense>
+                Launch App
+              </Button>
             </div>
             <button
               className="flex md:hidden"
@@ -221,22 +213,8 @@ export const Navbar = () => {
         </nav>
       </header>
       {showMobileMenu && (
-        <MobileMenu setShowMobileMenu={setShowMobileMenu} auth={auth} />
+        <MobileMenu setShowMobileMenu={setShowMobileMenu} auth={null} />
       )}
     </>
   );
 };
-
-function LoginOrDashboard() {
-  const auth = use(useAuthContext().user);
-  return (
-    <Button
-      variant="dark"
-      href={auth ? "/dashboard" : "/login"}
-      size="sm"
-      className="w-full font-medium sm:w-auto"
-    >
-      {auth ? "Dashboard" : "Login"}
-    </Button>
-  );
-}

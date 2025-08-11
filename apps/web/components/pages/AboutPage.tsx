@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@cap/ui";
-import MuxPlayer from "@mux/mux-player-react";
 import { ReadyToGetStarted } from "../ReadyToGetStarted";
 
 export const AboutPage = () => {
@@ -43,14 +42,6 @@ export const AboutPage = () => {
             >
               See it in Action
             </Button>
-            <Button
-              variant="primary"
-              href="/download"
-              size="lg"
-              className="relative z-[20] w-full font-medium text-md sm:w-auto"
-            >
-              Download Cap
-            </Button>
           </div>
           <img
             src="/illustrations/mask-big-recorder.webp"
@@ -69,25 +60,6 @@ export const AboutPage = () => {
                 puts you first, respects your privacy, and gives you full
                 control over your content.
               </p>
-            </div>
-
-            <div className="mb-12" id="video">
-              <div className="text-center max-w-[800px] mx-auto mb-10">
-                <h2 className="inline-block relative mb-6 text-3xl font-medium text-gray-800">
-                  See Cap In Action
-                  <span className="absolute -bottom-2 left-1/2 w-20 h-1 bg-blue-500 rounded-full transform -translate-x-1/2"></span>
-                </h2>
-              </div>
-              <div className="mx-auto max-w-3xl">
-                <div className="rounded-xl overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.08)]">
-                  <MuxPlayer
-                    playbackId="A6oZoUWVZjOIVZB6XnBMLagYnXE6xhDhp8Hcyky018hk"
-                    metadataVideoTitle="Cap Demo"
-                    accentColor="#5C9FFF"
-                    style={{ aspectRatio: "16/9", width: "100%" }}
-                  />
-                </div>
-              </div>
             </div>
 
             <div className="space-y-8">

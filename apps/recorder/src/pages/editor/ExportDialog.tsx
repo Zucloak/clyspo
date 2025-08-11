@@ -24,6 +24,8 @@ import { createStore, produce, reconcile } from "solid-js/store";
 import toast from "solid-toast";
 
 import { authStore } from "~/store";
+import { addRecording, getAllProjects } from "~/utils/db";
+import { saveVideoToFile } from "~/utils/export";
 // import { trackEvent } from "~/utils/analytics";
 // import { exportVideo } from "~/utils/export";
 // import {
@@ -113,6 +115,8 @@ export function ExportDialog() {
     exportState,
     meta,
     refetchMeta,
+    recording,
+    project,
   } = useEditorContext();
 
   const auth = authStore.createQuery();
@@ -215,34 +219,43 @@ export function ExportDialog() {
 
   const save = createMutation(() => ({
     mutationFn: async () => {
-      // if (exportState.type !== "idle") return;
-      // const extension = settings.format === "Gif" ? "gif" : "mp4";
-      // const savePath = await saveDialog({
-      //   filters: [
-      //     {
-      //       name: `${extension.toUpperCase()} filter`,
-      //       extensions: [extension],
-      //     },
-      //   ],
-      //   defaultPath: `~/Desktop/${meta().prettyName}.${extension}`,
-      // });
-      // if (!savePath) {
-      //   setExportState(reconcile({ type: "idle" }));
-      //   return;
-      // }
-      // setExportState(reconcile({ action: "save", type: "starting" }));
-      // setOutputPath(savePath);
-      // trackEvent("export_started", {
-      //   resolution: settings.resolution,
-      //   fps: settings.fps,
-      //   path: savePath,
-      // });
-      // const videoPath = await exportWithSettings((progress) => {
-      //   setExportState({ type: "rendering", progress });
-      // });
-      // setExportState({ type: "copying" });
-      // await commands.copyFileToPath(videoPath, savePath);
-      // setExportState({ type: "done" });
+      if (exportState.type !== "idle") return;
+
+      setExportState(reconcile({ action: "save", type: "starting" }));
+
+      const projects = await getAllProjects();
+      const defaultProject = projects[0];
+
+      if (!defaultProject) {
+        toast.error("No project found to save the recording to.");
+        setExportState(reconcile({ type: "idle" }));
+        return;
+      }
+
+      const newRecording = {
+        projectId: defaultProject.id,
+        video: recording.video,
+        audio: recording.audio,
+        thumbnail: new Blob(), // TODO: Generate thumbnail
+        metadata: project,
+        zoomSegments: project.timeline?.zoomSegments || [],
+        clicks: [], // TODO: Get clicks
+      };
+
+      const recordingId = await addRecording(newRecording);
+
+      toast.success("Recording saved locally!");
+
+      const handle = await saveVideoToFile(
+        recording.video,
+        `${defaultProject.name}-${recordingId}.mp4`
+      );
+
+      if (handle) {
+        toast.success("Recording exported to file!");
+      }
+
+      setExportState({ type: "done" });
     },
     onError: (error) => {
       // commands.globalMessageDialog(

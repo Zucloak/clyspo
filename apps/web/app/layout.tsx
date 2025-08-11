@@ -7,20 +7,9 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { PropsWithChildren } from "react";
-import { getBootstrapData } from "@/utils/getBootstrapData";
-// import { Analytics as DubAnalytics } from "@dub/analytics/react";
-
-import {
-  SessionProvider,
-  PostHogProvider,
-  ReactQueryProvider,
-} from "./Layout/providers";
 
 //@ts-expect-error
 import { script } from "./themeScript";
-// import { getCurrentUser } from "@cap/database/auth/session";
-import { AuthContextProvider } from "./Layout/AuthContext";
-// import { PosthogIdentify } from "./Layout/PosthogIdentify";
 
 const defaultFont = localFont({
   src: [
@@ -72,15 +61,6 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {
-  const bootstrapData = await getBootstrapData();
-  // const userPromise = getCurrentUser();
-  const userPromise = Promise.resolve({
-    id: "1",
-    name: "Local User",
-    email: "user@localhost",
-  } as any);
-
-
   return (
     <html className={defaultFont.className} lang="en">
       <head>
@@ -112,33 +92,17 @@ export default async function RootLayout({ children }: PropsWithChildren) {
           dangerouslySetInnerHTML={{ __html: `(${script.toString()})()` }}
         />
         <TooltipPrimitive.Provider>
-          {/* <PostHogProvider bootstrapData={bootstrapData}> */}
-            <AuthContextProvider user={userPromise}>
-              {/* <SessionProvider> */}
-                <PublicEnvContext
-                  value={{
-                    webUrl: buildEnv.NEXT_PUBLIC_WEB_URL,
-                    awsBucket: buildEnv.NEXT_PUBLIC_CAP_AWS_BUCKET,
-                    s3BucketUrl: S3_BUCKET_URL,
-                  }}
-                >
-                  <ReactQueryProvider>
-                    <SonnerToaster />
-                    <main className="w-full">{children}</main>
-                    {/* <PosthogIdentify /> */}
-                  </ReactQueryProvider>
-                </PublicEnvContext>
-              {/* </SessionProvider> */}
-            </AuthContextProvider>
-          {/* </PostHogProvider> */}
-        </TooltipPrimitive.Provider>
-        {/* {buildEnv.NEXT_PUBLIC_IS_CAP && (
-          <DubAnalytics
-            domainsConfig={{
-              refer: "go.cap.so",
+          <PublicEnvContext
+            value={{
+              webUrl: buildEnv.NEXT_PUBLIC_WEB_URL,
+              awsBucket: buildEnv.NEXT_PUBLIC_CAP_AWS_BUCKET,
+              s3BucketUrl: S3_BUCKET_URL,
             }}
-          />
-        )} */}
+          >
+            <SonnerToaster />
+            <main className="w-full">{children}</main>
+          </PublicEnvContext>
+        </TooltipPrimitive.Provider>
       </body>
     </html>
   );

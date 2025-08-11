@@ -45,6 +45,9 @@
       ],
       "@/actions/*": [
         "actions/*"
+      ],
+      "~/*": [
+        "../recorder/src/*"
       ]
     }
   },
