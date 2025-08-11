@@ -44,7 +44,7 @@ export default function Page() {
     });
   });
 
-  let fadeIn = changelog.isLoading;
+  const fadeIn = changelog.isLoading;
 
   return (
     <div class="flex flex-col h-full">
@@ -70,7 +70,7 @@ export default function Page() {
                       <div class="flex mb-2">
                         <Show when={i() === 0}>
                           <div class="bg-[--blue-400] text-[--text-primary] px-2 py-1 rounded-md uppercase font-bold">
-                            <span style="color: #fff" class="text-xs">
+                            <span style={{"color":"#fff"}} class="text-xs">
                               New
                             </span>
                           </div>

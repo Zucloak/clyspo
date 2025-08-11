@@ -1468,7 +1468,7 @@ function ZoomSegmentConfig(props: {
                   if (projectHistory.isPaused()) return prev;
 
                   const st = start();
-                  let i = project.timeline?.segments.findIndex(
+                  const i = project.timeline?.segments.findIndex(
                     (s) => s.start <= st && s.end > st,
                   );
                   if (i === undefined || i === -1) return 0;

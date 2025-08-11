@@ -150,8 +150,8 @@ export default function Cropper(
       y: mapped.y / 2,
     };
 
-    let width = clamp(initial.x, minSize().x, mapped.x);
-    let height = clamp(initial.y, minSize().y, mapped.y);
+    const width = clamp(initial.x, minSize().x, mapped.x);
+    const height = clamp(initial.y, minSize().y, mapped.y);
 
     const box = Box.from(
       { x: (mapped.x - width) / 2, y: (mapped.y - height) / 2 },
@@ -519,7 +519,7 @@ export default function Cropper(
     props.onCropChange(value);
   }
 
-  let pressedKeys = new Set<string>([]);
+  const pressedKeys = new Set<string>([]);
   let lastKeyHandleFrame: number | null = null;
   function handleKeyDown(event: KeyboardEvent) {
     if (dragging()) return;

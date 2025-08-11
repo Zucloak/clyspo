@@ -7,7 +7,7 @@ import { listen } from "@tauri-apps/api/event";
 import { getCurrentWindow, Window } from "@tauri-apps/api/window";
 import { onOpenUrl } from "@tauri-apps/plugin-deep-link";
 import * as shell from "@tauri-apps/plugin-shell";
-import { Accessor, createSignal, onCleanup, onMount, Show } from "solid-js";
+import { Accessor, createSignal, onCleanup, onMount, Show, For } from "solid-js";
 import { generalSettingsStore } from "~/store";
 import { identifyUser, trackEvent } from "~/utils/analytics";
 import { clientEnv } from "~/utils/env";
@@ -405,12 +405,12 @@ export default function Page() {
                         </p>
                       </div>
                       <ul class="flex flex-col gap-2 justify-center list-none">
-                        {[
+                        <For each={[
                           "Commercial Use of Cap Recorder + Editor",
                           "Community Support",
                           "Local-only features",
                           "Perpetual license option",
-                        ].map((feature) => (
+                        ]}>{(feature) => (
                           <li class="flex justify-start items-center">
                             <div class="flex justify-center items-center p-0 m-0 w-6 h-6">
                               <IconLucideCheck class="w-4 h-4 text-[--text-primary]" />
@@ -419,7 +419,7 @@ export default function Page() {
                               {feature}
                             </span>
                           </li>
-                        ))}
+                        )}</For>
                       </ul>
                     </div>
                   </div>
@@ -511,14 +511,14 @@ export default function Page() {
                         </p>
                       </div>
                       <ul class="flex flex-col gap-2 justify-center list-none">
-                        {proFeatures.map((feature) => (
+                        <For each={proFeatures}>{(feature) => (
                           <li class="flex justify-start items-center text-gray-1">
                             <div class="flex justify-center items-center p-0 m-0 size-4">
                               <IconLucideCheck class="size-4" />
                             </div>
                             <span class="ml-2 text-[0.9rem]">{feature}</span>
                           </li>
-                        ))}
+                        )}</For>
                       </ul>
                     </div>
                     <Button
@@ -544,7 +544,7 @@ interface Props {
   onOpenChange: (open: boolean) => void;
 }
 
-const ActivateLicenseDialog = ({ open, onOpenChange }: Props) => {
+const ActivateLicenseDialog = (props: Props) => {
   const [licenseKey, setLicenseKey] = createSignal("");
   const queryClient = useQueryClient();
 
@@ -581,7 +581,7 @@ const ActivateLicenseDialog = ({ open, onOpenChange }: Props) => {
     },
   }));
   return (
-    <Dialog.Root open={open()} onOpenChange={onOpenChange}>
+    <Dialog.Root open={props.open()} onOpenChange={props.onOpenChange}>
       <DialogContent
         title="Activate License"
         confirm={

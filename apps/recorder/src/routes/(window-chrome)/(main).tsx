@@ -4,13 +4,9 @@ import {
   ComponentProps,
   createEffect,
   createSignal,
-  ErrorBoundary,
-  onCleanup,
-  onMount,
   Show,
-  Suspense,
 } from "solid-js";
-import { createStore, reconcile } from "solid-js/store";
+import { reconcile } from "solid-js/store";
 
 import Mode from "~/components/Mode";
 import Tooltip from "~/components/Tooltip";
@@ -23,13 +19,6 @@ import {
 } from "~/utils/types";
 import { addRecording } from "~/utils/db";
 import { generateZoomSegments } from "~/utils/zoom";
-
-function getWindowSize() {
-  return {
-    width: 300,
-    height: 340,
-  };
-}
 
 export default function () {
   return (
@@ -378,10 +367,6 @@ function CameraSelect(props: {
   onChange: (cameraInfo: any | null) => void;
 }) {
   const permissionGranted = () => true;
-
-  const onChange = (cameraInfo: any | null) => {
-    props.onChange(cameraInfo);
-  };
 
   return (
     <div class="flex flex-col gap-[0.25rem] items-stretch text-[--text-primary]">

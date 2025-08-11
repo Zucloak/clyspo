@@ -9,7 +9,7 @@ import {
   Match,
   Show,
   Suspense,
-  Switch,
+  Switch, For,
 } from "solid-js";
 import { generalSettingsStore } from "~/store";
 import { createLicenseQuery } from "~/utils/queries";
@@ -273,12 +273,12 @@ function CommercialLicensePurchase() {
           {/* Right Column */}
           <div class="flex flex-col gap-4 justify-center items-center p-5 rounded-t-none rounded-b-xl border border-t-0 md:border-t md:border-l-0 md:rounded-bl-none md:rounded-tr-xl md:rounded-br-xl md:w-1/2 border-gray-3">
             <ul class="flex flex-col gap-2 list-none">
-              {[
+              <For each={[
                 "Commercial Use of Cap Recorder + Editor",
                 "Community Support",
                 "Local-only features",
                 "Perpetual license option",
-              ].map((feature) => (
+              ]}>{(feature) => (
                 <li class="flex justify-start items-center">
                   <div class="flex justify-center items-center p-0 m-0 w-6 h-6">
                     <IconLucideCheck class="w-4 h-4 text-[--text-primary]" />
@@ -287,7 +287,7 @@ function CommercialLicensePurchase() {
                     {feature}
                   </span>
                 </li>
-              ))}
+              )}</For>
             </ul>
           </div>
         </div>

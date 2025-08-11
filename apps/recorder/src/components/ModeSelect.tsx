@@ -1,5 +1,5 @@
 import { cx } from "cva";
-import { JSX } from "solid-js";
+import { JSX, For } from "solid-js";
 import { createOptionsQuery } from "~/utils/queries";
 import { RecordingMode } from "~/utils/tauri";
 import InstantModeDark from "../assets/illustrations/instant-mode-dark.png";
@@ -74,7 +74,7 @@ const ModeSelect = () => {
 
   return (
     <div class="grid grid-cols-2 gap-8 text-center">
-      {modeOptions.map((option) => (
+      <For each={modeOptions}>{(option) => (
         <ModeOption
           mode={option.mode}
           title={option.title}
@@ -85,7 +85,7 @@ const ModeSelect = () => {
           isSelected={rawOptions.mode === option.mode}
           onSelect={handleModeChange}
         />
-      ))}
+      )}</For>
     </div>
   );
 };

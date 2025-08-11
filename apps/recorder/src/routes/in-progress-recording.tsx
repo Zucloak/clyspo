@@ -157,7 +157,7 @@ export default function () {
     return t;
   };
 
-  let [countdownRef, setCountdownRef] = createSignal<HTMLDivElement | null>(
+  const [countdownRef, setCountdownRef] = createSignal<HTMLDivElement | null>(
     null
   );
   const showCountdown = () => state().variant === "countdown";

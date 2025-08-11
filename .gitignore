@@ -11,6 +11,7 @@ target
 .vercel
 .next
 out
+apps/desktop/.output
 
 # logs
 logs

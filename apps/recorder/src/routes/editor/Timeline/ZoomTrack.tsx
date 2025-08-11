@@ -272,7 +272,7 @@ export function ZoomTrack(props: {
 
                     let minValue = 0;
 
-                    let maxValue = segment.end - 1;
+                    const maxValue = segment.end - 1;
 
                     for (let i = zoomSegments().length - 1; i >= 0; i--) {
                       const segment = zoomSegments()[i]!;

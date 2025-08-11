@@ -10,7 +10,6 @@ import {
   createSignal,
   For,
   JSX,
-  onCleanup,
   ParentProps,
   Show,
 } from "solid-js";
