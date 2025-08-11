@@ -17,9 +17,9 @@ import {
 import { createStore } from "solid-js/store";
 import { useParams } from "@solidjs/router";
 
-import Cropper, { cropToFloor } from "~/components/Cropper";
-import { Toggle } from "~/components/Toggle";
-import Tooltip from "~/components/Tooltip";
+import Cropper, { cropToFloor } from "../../components/Cropper";
+import { Toggle } from "../../components/Toggle";
+import Tooltip from "../../components/Tooltip";
 import { ConfigSidebar } from "./ConfigSidebar";
 import {
   EditorContextProvider,
@@ -32,7 +32,7 @@ import { Header } from "./Header";
 import { Player } from "./Player";
 import { Timeline } from "./Timeline";
 import { Dialog, DialogContent, EditorButton, Input, Subfield } from "./ui";
-import { getRecording } from "~/utils/db";
+import { getRecording } from "../../utils/db";
 
 export function Editor() {
   const params = useParams();

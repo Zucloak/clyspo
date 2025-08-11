@@ -10,11 +10,7 @@
     "types": ["vite/client"],
     "noEmit": true,
     "isolatedModules": true,
-    "strict": true,
-    "baseUrl": "./",
-    "paths": {
-      "~/*": ["./src/*"]
-    }
+    "strict": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules"]

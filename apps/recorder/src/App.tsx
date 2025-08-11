@@ -1,7 +1,5 @@
-import { Router } from "@solidjs/router";
-import { FileRoutes } from "@solidjs/start/router";
+import { Routes } from "@generouted/solid-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
-import { Suspense } from "solid-js";
 import { Toaster } from "solid-toast";
 
 import "@cap/ui-solid/main.css";
@@ -28,11 +26,7 @@ export default function App() {
           },
         }}
       />
-      <Router>
-        <Suspense>
-          <FileRoutes />
-        </Suspense>
-      </Router>
+      <Routes />
     </QueryClientProvider>
   );
 }

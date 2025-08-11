@@ -9,7 +9,7 @@ import {
 } from "solid-js";
 
 import { Button } from "@cap/ui-solid";
-import Tooltip from "~/components/Tooltip";
+import Tooltip from "../../components/Tooltip";
 import { useEditorContext } from "./context";
 import { EditorButton } from "./ui";
 import { saveAs } from "file-saver";
@@ -99,7 +99,7 @@ const UploadIcon = (props: ComponentProps<"svg">) => {
   );
 };
 
-import { updateRecording } from "~/utils/db";
+import { updateRecording } from "../../utils/db";
 
 function NameEditor(props: { name: string }) {
   const { recording } = useEditorContext();
