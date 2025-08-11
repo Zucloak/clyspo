@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getAllRecordings, initDB } from "../../../../recorder/src/utils/db";
+import { getAllRecordings, initDB } from "~/utils/db";
 
 export default function RecordingsPage() {
   const [recordings, setRecordings] = useState<any[]>([]);
@@ -27,7 +27,7 @@ export default function RecordingsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {recordings.map((recording) => (
           <Link
-            href={`/editor/${recording.id}`}
+            href={`/editor?id=${recording.id}`}
             key={recording.id}
             className="border rounded-lg p-4 hover:shadow-lg"
           >

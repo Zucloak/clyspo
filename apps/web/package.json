@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@cap/env": "workspace:*",
+    "@cap/recorder": "workspace:*",
     "@cap/ui": "workspace:*",
     "@cap/utils": "workspace:*",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
