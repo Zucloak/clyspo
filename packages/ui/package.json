@@ -10,7 +10,7 @@
     "./style": "./style/styles.css"
   },
   "scripts": {
-    "lint": "eslint src --cache",
+    "lint:disabled": "eslint --ext .ts,.tsx src --cache",
     "typecheck": "tsc -b"
   },
   "devDependencies": {

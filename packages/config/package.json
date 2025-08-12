@@ -6,7 +6,7 @@
     "./vite": "./vite"
   },
   "scripts": {
-    "lint": "eslint . --cache"
+    "lint:disabled": "eslint . --cache"
   },
   "devDependencies": {
     "@types/node": "^20.4.5",

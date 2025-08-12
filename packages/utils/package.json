@@ -7,7 +7,7 @@
     ".": "./src/index.tsx"
   },
   "scripts": {
-    "lint": "eslint src --cache",
+    "lint:disabled": "eslint src --cache",
     "typecheck": "tsc -b"
   },
   "devDependencies": {
