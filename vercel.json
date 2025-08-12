@@ -1,4 +1,4 @@
 {
   "builds": [{ "use": "@vercel/node@20.x" }],
-  "buildCommand": "pnpm -w run build:web"
+  "buildCommand": "pnpm -w run build --filter=@cap/recorder && cp -r apps/recorder/dist ."
 }
