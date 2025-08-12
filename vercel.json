@@ -1,4 +1,4 @@
 {
   "builds": [{ "use": "@vercel/node@20.x" }],
-  "buildCommand": "pnpm run build"
+  "buildCommand": "pnpm run build:web"
 }
