@@ -13,7 +13,8 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": ["src/*"],
+      "~root/*": ["../../*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
