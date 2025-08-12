@@ -18,9 +18,9 @@ interface CapDBSchema extends DBSchema {
       video: Blob;
       audio: Blob;
       thumbnail: Blob;
-      metadata: Record<string, any>;
-      zoomSegments: any[];
-      clicks: any[];
+      metadata: Record<string, unknown>;
+      zoomSegments: unknown[];
+      clicks: unknown[];
       createdAt: number;
     };
     indexes: { 'by-project': number };
@@ -65,7 +65,7 @@ export async function getDB() {
 // Project CRUD
 export async function addProject(name: string) {
   const db = await getDB();
-  return db.add('projects', { name, createdAt: Date.now() } as any);
+  return db.add('projects', { name, createdAt: Date.now() });
 }
 
 export async function getProject(id: number) {
@@ -78,7 +78,7 @@ export async function getAllProjects() {
   return db.getAll('projects');
 }
 
-export async function updateProject(id: number, updates: Partial<any>) {
+export async function updateProject(id: number, updates: Partial<CapDBSchema['projects']['value']>) {
   const db = await getDB();
   const project = await db.get('projects', id);
   if (project) {
@@ -98,9 +98,9 @@ export async function deleteProject(id: number) {
 }
 
 // Recording CRUD
-export async function addRecording(recording: Omit<any, 'id'>) {
+export async function addRecording(recording: Omit<CapDBSchema['recordings']['value'], 'id'>) {
     const db = await getDB();
-    return db.add('recordings', { ...recording, createdAt: Date.now() } as any);
+    return db.add('recordings', { ...recording, createdAt: Date.now() });
 }
 
 export async function getRecording(id: number) {
@@ -113,7 +113,7 @@ export async function getRecordingsForProject(projectId: number) {
     return db.getAllFromIndex('recordings', 'by-project', projectId);
 }
 
-export async function updateRecording(id: number, updates: Partial<any>) {
+export async function updateRecording(id: number, updates: Partial<CapDBSchema['recordings']['value']>) {
     const db = await getDB();
     const recording = await db.get('recordings', id);
     if (recording) {

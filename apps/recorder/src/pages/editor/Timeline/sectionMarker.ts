@@ -60,8 +60,14 @@ export function getSectionMarker(
       const right = rightTime === 0 ? null : { type: "time", time: rightTime };
 
       if (left === null && right === null) return null;
-
-      return { type: "dual", left, right } as any;
+      if (left && right) {
+        return { type: "dual", left, right };
+      }
+      if (left) {
+        return { type: "dual", left, right: null };
+      }
+      // right must be non-null here because of the check above
+      return { type: "dual", left: null, right };
     }
   }
 

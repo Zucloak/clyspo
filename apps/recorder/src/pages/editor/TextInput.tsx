@@ -1,4 +1,4 @@
-import { ComponentProps } from "solid-js";
+import { ComponentProps, JSX } from "solid-js";
 import { composeEventHandlers } from "../../utils/composeEventHandlers";
 
 // It's important to use this instead of plain text inputs as we use global key listeners
@@ -7,7 +7,7 @@ export function TextInput(props: ComponentProps<"input">) {
   return (
     <input
       {...props}
-      onKeyDown={composeEventHandlers<HTMLInputElement>([
+      onKeyDown={composeEventHandlers<HTMLInputElement, JSX.KeyboardEvent<HTMLInputElement>>([
         props.onKeyDown,
         (e) => {
           e.stopPropagation();

@@ -3,25 +3,19 @@ import {
 } from "@kobalte/core/collapsible";
 import {
   RadioGroup as KRadioGroup,
-  RadioGroup,
 } from "@kobalte/core/radio-group";
-import { Select as KSelect } from "@kobalte/core/select";
 import { Tabs as KTabs } from "@kobalte/core/tabs";
-import { createElementBounds } from "@solid-primitives/bounds";
 import { createEventListenerMap } from "@solid-primitives/event-listener";
 import { createWritableMemo } from "@solid-primitives/memo";
 import { cx } from "cva";
 import {
   For,
   Show,
-  ValidComponent,
   batch,
-  createEffect,
   createMemo,
   createResource,
   createRoot,
   createSignal,
-  on,
   onMount,
 } from "solid-js";
 import { createStore } from "solid-js/store";
@@ -31,7 +25,6 @@ import toast from "solid-toast";
 // import gradientBg from "~/assets/illustrations/gradient.webp";
 // import imageBg from "~/assets/illustrations/image.webp";
 // import transparentBg from "~/assets/illustrations/transparent.webp";
-import { Toggle } from "~/components/Toggle";
 import { useEditorContext } from "./context";
 import {
   DEFAULT_GRADIENT_FROM,
@@ -41,18 +34,11 @@ import {
 import ShadowSettings from "./ShadowSettings";
 import { TextInput } from "./TextInput";
 import {
-  ComingSoonTooltip,
-  EditorButton,
   Field,
-  MenuItem,
-  MenuItemList,
-  PopperContent,
   Slider,
-  Subfield,
-  topSlideAnimateClasses,
 } from "./ui";
 import { CaptionsTab } from "./CaptionsTab";
-import { BackgroundSource, CameraShape, StereoMode } from "~/utils/types";
+import { BackgroundSource } from "~/utils/types";
 
 const BACKGROUND_SOURCES = {
   wallpaper: "Wallpaper",
@@ -161,17 +147,6 @@ const WALLPAPER_NAMES = [
   "orange/8",
   "orange/9",
 ] as const;
-
-const CAMERA_SHAPES = [
-  {
-    name: "Square",
-    value: "square",
-  },
-  {
-    name: "Source",
-    value: "source",
-  },
-] satisfies Array<{ name: string; value: CameraShape }>;
 
 const BACKGROUND_THEMES = {
   macOS: "macOS",
@@ -1141,5 +1116,9 @@ function rgbToHex(rgb: [number, number, number]) {
 function hexToRgb(hex: string): [number, number, number] | null {
   const match = hex.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
   if (!match) return null;
-  return match.slice(1).map((c) => Number.parseInt(c, 16)) as any;
+  return match.slice(1).map((c) => Number.parseInt(c, 16)) as [
+    number,
+    number,
+    number,
+  ];
 }

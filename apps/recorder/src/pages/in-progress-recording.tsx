@@ -5,13 +5,11 @@ import { createMutation } from "@tanstack/solid-query";
 // import { type as ostype } from "@tauri-apps/plugin-os";
 import { cx } from "cva";
 import {
-  createEffect,
   createSignal,
   type ComponentProps,
   Show,
-  onCleanup,
 } from "solid-js";
-import { createStore, produce } from "solid-js/store";
+import { createStore } from "solid-js/store";
 import createPresence from "solid-presence";
 
 import {
@@ -44,14 +42,14 @@ export default function () {
           current: window.COUNTDOWN,
         }
   );
-  const [start, setStart] = createSignal(Date.now());
+  const [start] = createSignal(Date.now());
   const [time, setTime] = createSignal(Date.now());
   // const currentRecording = createCurrentRecordingQuery();
   const optionsQuery = createOptionsQuery();
 
   const audioLevel = createAudioInputLevel();
 
-  const [pauseResumes, setPauseResumes] = createStore<
+  const [pauseResumes] = createStore<
     | []
     | [
         ...Array<{ pause: number; resume?: number }>,
@@ -282,7 +280,7 @@ function formatTime(secs: number) {
 }
 
 function createAudioInputLevel() {
-  const [level, setLevel] = createSignal(0);
+  const [level] = createSignal(0);
 
   // createTauriEventListener(events.audioInputLevelChange, (dbs) => {
   //   const DB_MIN = -60;

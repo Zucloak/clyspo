@@ -426,9 +426,7 @@ export const topRightAnimateClasses =
 export const topSlideAnimateClasses =
   "ui-expanded:animate-in ui-expanded:fade-in ui-expanded:slide-in-from-top-1 ui-closed:animate-out ui-closed:fade-out ui-closed:slide-out-to-top-1 origin-top-center";
 
-export function ComingSoonTooltip(
-  props: ComponentProps<typeof KTooltip> & any
-) {
+export function ComingSoonTooltip(props: ComponentProps<typeof KTooltip>) {
   const [trigger, root] = splitProps(props, ["children", "as"]);
   return (
     <KTooltip placement="top" openDelay={0} closeDelay={0} {...root}>

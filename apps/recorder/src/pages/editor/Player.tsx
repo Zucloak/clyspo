@@ -1,45 +1,22 @@
-import { ToggleButton as KToggleButton } from "@kobalte/core/toggle-button";
 import { createElementBounds } from "@solid-primitives/bounds";
-import { createEventListener } from "@solid-primitives/event-listener";
 import { createEffect, createSignal, Show } from "solid-js";
 
 import { cx } from "cva";
 import {
-  For,
-  Suspense,
-  createResource,
-  on,
   onMount,
-  onCleanup,
 } from "solid-js";
-import { reconcile, createStore } from "solid-js/store";
 
-import Tooltip from "~/components/Tooltip";
-import { FPS, OUTPUT_SIZE, useEditorContext } from "./context";
-import { ComingSoonTooltip, EditorButton, Slider } from "./ui";
+import { FPS, useEditorContext } from "./context";
 import { formatTime } from "./utils";
 import AspectRatioSelect from "./AspectRatioSelect";
 
 export function Player(props: { videoUrl: string }) {
   const {
     project,
-    editorInstance,
-    setDialog,
     totalDuration,
     editorState,
     setEditorState,
-    zoomOutLimit,
-    setProject,
   } = useEditorContext();
-
-  const [canvasContainerRef, setCanvasContainerRef] =
-    createSignal<HTMLDivElement>();
-  const containerBounds = createElementBounds(canvasContainerRef);
-
-  const isAtEnd = () => {
-    const total = totalDuration();
-    return total > 0 && total - editorState.playbackTime <= 0.1;
-  };
 
   let videoRef: HTMLVideoElement | undefined;
 

@@ -1,5 +1,5 @@
 import { makePersisted } from "@solid-primitives/storage";
-import { createStore, reconcile } from "solid-js/store";
+import { createStore } from "solid-js/store";
 
 import { createEventListener } from "@solid-primitives/event-listener";
 import {

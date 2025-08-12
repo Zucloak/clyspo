@@ -155,7 +155,6 @@ export function ClipTrack(
     totalDuration,
     micWaveforms,
     systemAudioWaveforms,
-    metaQuery,
   } = useEditorContext();
 
   const { secsPerPixel, duration } = useTimelineContext();

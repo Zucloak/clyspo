@@ -3,21 +3,15 @@ import { createContextProvider } from "@solid-primitives/context";
 import { trackStore } from "@solid-primitives/deep";
 import { createEventListener } from "@solid-primitives/event-listener";
 import { createUndoHistory } from "@solid-primitives/history";
-import { debounce } from "@solid-primitives/scheduled";
-import { createQuery, skipToken } from "@tanstack/solid-query";
 import {
   Accessor,
   batch,
-  createEffect,
-  createResource,
   createSignal,
-  on,
 } from "solid-js";
 import { createStore, produce, reconcile, unwrap } from "solid-js/store";
 
 import { createPresets } from "~/utils/createPresets";
 // import { createCustomDomainQuery } from "~/utils/queries";
-import { createImageDataWS, createLazySignal } from "~/utils/socket";
 // import {
 //   commands,
 //   events,
@@ -76,12 +70,10 @@ export const [EditorContextProvider, useEditorContext] = createContextProvider(
           "segments",
           produce((segments) => {
             let searchTime = time;
-            let prevDuration = 0;
             const currentSegmentIndex = segments.findIndex((segment) => {
               const duration = segment.end - segment.start;
               if (searchTime > duration) {
                 searchTime -= duration;
-                prevDuration += duration;
                 return false;
               }
 
@@ -106,7 +98,7 @@ export const [EditorContextProvider, useEditorContext] = createContextProvider(
         const segment = project.timeline.segments[segmentIndex];
         if (
           !segment ||
-          !segment.recordingSegment === undefined ||
+          segment.recordingSegment === undefined ||
           project.timeline.segments.filter(
             (s) => s.recordingSegment === segment.recordingSegment
           ).length < 2
@@ -301,8 +293,6 @@ export const [EditorContextProvider, useEditorContext] = createContextProvider(
       zoomOutLimit,
       exportState,
       setExportState,
-      micWaveforms,
-      systemAudioWaveforms,
     };
   },
   // biome-ignore lint/style/noNonNullAssertion: it's ok

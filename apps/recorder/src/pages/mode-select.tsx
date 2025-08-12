@@ -1,5 +1,4 @@
 import ModeSelect from "~/components/ModeSelect";
-import { onMount } from "solid-js";
 // import { getCurrentWindow } from "@tauri-apps/api/window";
 // import { LogicalSize } from "@tauri-apps/api/window";
 

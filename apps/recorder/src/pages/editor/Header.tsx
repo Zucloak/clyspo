@@ -1,17 +1,11 @@
 import { cx } from "cva";
 import {
   ComponentProps,
-  createEffect,
   createSignal,
-  onCleanup,
-  onMount,
-  Show,
 } from "solid-js";
 
 import { Button } from "@cap/ui-solid";
-import Tooltip from "../../components/Tooltip";
 import { useEditorContext } from "./context";
-import { EditorButton } from "./ui";
 import { saveAs } from "file-saver";
 
 export type ResolutionOption = {

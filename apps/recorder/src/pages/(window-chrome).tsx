@@ -50,7 +50,7 @@ export default function (props: RouteSectionProps) {
             (() => {
               console.log("Outer window chrome suspense fallback");
               return <AbsoluteInsetLoader />;
-            }) as any
+            })()
           }
         >
           <Inner>
@@ -59,7 +59,7 @@ export default function (props: RouteSectionProps) {
               fallback={
                 (() => {
                   console.log("Inner window chrome suspense fallback");
-                }) as any
+                })()
               }
             >
               {props.children}
