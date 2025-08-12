@@ -1,4 +1,5 @@
 import { fileURLToPath } from "node:url";
+import { resolve } from "node:path";
 import AutoImport from "unplugin-auto-import/vite";
 import IconsResolver from "unplugin-icons/resolver";
 import Icons from "unplugin-icons/vite";
@@ -23,7 +24,7 @@ export default [
     enabledCollections: ["lucide"],
     customCollections: {
       cap: FileSystemIconLoader(
-        fileURLToPath(new URL("./icons", import.meta.url))
+        resolve(process.cwd(), "packages/ui-solid/icons")
         // (svg) => svg.replace(/^<svg /, '<svg stroke="currentColor" ')
       ),
     },

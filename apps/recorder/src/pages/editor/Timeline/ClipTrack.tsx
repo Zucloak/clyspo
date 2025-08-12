@@ -449,7 +449,7 @@ export function ClipTrack(
                               : "Clip"}
                           </span>
                           <div class="flex gap-1 items-center text-md dark:text-gray-12 text-gray-1">
-                            <IconLucideClock class="size-3.5" />{" "}
+                            <IconCapStopwatch class="size-3.5" />{" "}
                             {(segment.end - segment.start).toFixed(1)}s
                           </div>
                         </div>

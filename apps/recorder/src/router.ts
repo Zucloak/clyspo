@@ -14,7 +14,6 @@ export type Path =
   | `/editor/Player`
   | `/editor/PresetsDropdown`
   | `/editor/ShadowSettings`
-  | `/editor/ShareButton`
   | `/editor/TextInput`
   | `/editor/Timeline`
   | `/editor/Timeline/ClipTrack`

@@ -216,7 +216,7 @@ export default function () {
                 </div>
               </>
             ) : (
-              <IconLucideMicOff
+              <IconCapAudioOff
                 class="text-gray-7 size-5"
                 data-tauri-drag-region
               />
